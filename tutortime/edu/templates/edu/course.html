@@ -1,0 +1,85 @@
+{% extends 'baseedu.html' %}
+
+{% block content %}
+    {% load static %}
+    <!-- Container - Course -->
+    <div id="course" class="container">
+
+        <!-- Login and Logo -->
+        <div class="row text-center">
+            <div class="col-xs-12">
+                {% if user.is_authenticated %}
+                <p><b><a href="/user/{{user.id}}">{{user.first_name}} {{user.last_name}} ({{user.username}})</a> | <a href="/logout/">Logout</a></b></p>
+                {% else %}
+                <p><b><a href="/login/">Login</a> | <a href="/signup/">Register</a></b></p>
+                {% endif %}
+                <h3><a href="/edu"><img src="{% static 'main/Edu.png'%}" class="img-responsive center-block"></a></h3>
+            </div>
+        </div>
+        <div class="row text-center">
+            <div class="col-xs-12">
+                <p class="bg-danger"><b>{{error_message}}</b></p>
+            </div>
+        </div>
+
+        <!-- Check for whether to present editing form -->
+        {% if course_id == "new" or editing == True %}
+            <!-- Only proceed if this is an admin -->
+            {% if admin %}
+                <!-- Present the editing form -->
+                <div class="row text-center">
+                    <div class="col-xs-12">
+                        {% if course_id == "new" %}
+                        <h3>New Course Registration</h3>
+                        {% elif editing == True %}
+                        <h3>Edit Existing Course</h3>
+                        {% endif %}
+                        <br>
+                    </div>
+                </div>
+                <form action="/edu/course/{{course_id}}" method="post">
+                    {% csrf_token %}
+                    {% for field in form %}
+                        <div class="row">
+                            <div class="col-xs-6 text-right"><b>{{field.label_tag}}</b></b></div><div class="col-xs-6 text-left">{{field}}</div>
+                        </div>
+                    {% endfor %}
+                    <br>
+                    <div class="row"><div class="col-xs-12 text-center"><input type="submit" value="Save" /></div></div>
+                </form>
+            {% endif %}
+        {% else %}
+
+            <!-- Otherwise, display current information -->
+            <div class="row text-center">
+                <div class="col-xs-12">
+                    <a href="/edu/allcourses" style="color:black"><h3>School Courses</h3></a>
+                    <h2>{{cur_course.title}}</h2>
+                </div>
+            </div>
+            <div class="row"><div class="col-xs-6 text-right"><b>Year:</b></div><div class="col-xs-6 text-left">{{cur_course.year}}</div></div>
+            <div class="row"><div class="col-xs-6 text-right"><b>Grade:</b></div><div class="col-xs-6 text-left">{{cur_course.grade}}</div></div>
+            <div class="row"><div class="col-xs-6 text-right"><b>Teacher:</b></div><div class="col-xs-6 text-left"><a href="/edu/teacher/{{cur_course.teacher.id}}" class="text-center">{{cur_course.teacher.first_name}} {{cur_course.teacher.last_name}}</a></div></div>
+            <div class="row"><div class="col-xs-6 text-right"><b>Active?:</b></div><div class="col-xs-6 text-left">{{cur_course.active}}</div></div>
+            <div class="row"><div class="col-xs-6 text-right"><b>Complete?:</b></div><div class="col-xs-6 text-left">{{cur_course.done}}</div></div>
+            <div class="row"><div class="col-xs-6 text-right"><b>Created On:</b></div><div class="col-xs-6 text-left">{{cur_course.date_created}}</div></div>
+            <div class="row"><div class="col-xs-6 text-right"><b>Course Information:</b></div><div class="col-xs-6 text-left">{{cur_course.info}}</div></div>
+
+            <!-- List out current students -->
+            <br>
+            <div class="row"><div class="col-xs-12 text-center"><b>Current Students</b></div></div>
+            {% for student in students %}
+                <div class="row"><div class="col-xs-12 text-center"><a href="/edu/student/{{student.id}}">{{student.first_name}} {{student.last_name}}</a></div></div>
+            {% endfor %}
+
+            <!--Only display an Edit button if this is an administrator -->
+            {% if admin %}
+                <br>
+                <form action="/edu/course/{{cur_course.id}}/edit">
+                    <div class="row"><div class="col-xs-12 text-center"><input type="submit" value="Edit Course"/></div></div>
+                </form>
+            {% endif %}
+            
+        {% endif %}
+    </div>
+{% endblock %}

@@ -1,0 +1,85 @@
+{% extends 'baseedu.html' %}
+
+{% block content %}
+    {% load static %}
+    <!-- Container - Course -->
+    <div id="teacher" class="container">
+
+        <!-- Login and Logo -->
+        <div class="row text-center">
+            <div class="col-xs-12">
+                {% if user.is_authenticated %}
+                <p><b><a href="/user/{{user.id}}">{{user.first_name}} {{user.last_name}} ({{user.username}})</a> | <a href="/logout/">Logout</a></b></p>
+                {% else %}
+                <p><b><a href="/login/">Login</a> | <a href="/signup/">Register</a></b></p>
+                {% endif %}
+                <h3><a href="/edu"><img src="{% static 'main/Edu.png'%}" class="img-responsive center-block"></a></h3>
+            </div>
+        </div>
+        <div class="row text-center">
+            <div class="col-xs-12">
+                <p class="bg-danger"><b>{{error_message}}</b></p>
+            </div>
+        </div>
+
+        <!-- Check for whether to present editing form -->
+        {% if teacher_id == "new" or editing == True %}
+            <!-- Only proceed if this is an admin -->
+            {% if admin or is_this_teacher %}
+                <!-- Present the editing form -->
+                <div class="row text-center">
+                    <div class="col-xs-12">
+                        {% if teacher_id == "new" %}
+                        <h3>New Teacher Registration</h3>
+                        {% elif editing == True %}
+                        <h3>Edit Existing Teacher</h3>
+                        {% endif %}
+                        <br>
+                    </div>
+                </div>
+                <form action="/edu/teacher/{{teacher_id}}" method="post">
+                    {% csrf_token %}
+                    {% for field in form %}
+                        <div class="row">
+                            <div class="col-xs-6 text-right"><b>{{field.label_tag}}</b></b></div><div class="col-xs-6 text-left">{{field}}</div>
+                        </div>
+                    {% endfor %}
+                    <br>
+                    <div class="row"><div class="col-xs-12 text-center"><input type="submit" value="Save" /></div></div>
+                </form>
+            {% endif %}
+        {% else %}
+
+            <!-- Otherwise, display current information -->
+            <div class="row text-center">
+                <div class="col-xs-12">
+                    <a href="/edu/allteachers" style="color:black"><h3>School Teachers</h3></a>
+                    <h2>{{cur_teacher.first_name}} {{cur_teacher.last_name}}</h2>
+                </div>
+            </div>
+            <div class="row"><div class="col-xs-6 text-right"><b>Email:</b></div><div class="col-xs-6 text-left">{{cur_teacher.email}}</div></div>
+
+            <div class="row"><div class="col-xs-6 text-right"><b>Phone Number:</b></div><div class="col-xs-6 text-left">{{cur_teacher.phone_number}}</div></div>
+            <div class="row"><div class="col-xs-6 text-right"><b>Gender:</b></div><div class="col-xs-6 text-left">{{cur_teacher.gender}}</div></div>
+            <div class="row"><div class="col-xs-6 text-right"><b>Joined:</b></div><div class="col-xs-6 text-left">{{cur_teacher.date_joined}}</div></div>
+            <div class="row"><div class="col-xs-6 text-right"><b>Biography:</b></div><div class="col-xs-6 text-left">{% if cur_teacher.bio %}{{cur_student.bio}}{% endif %}</div></div>
+
+            <!--Only display an Edit button if this is an administrator -->
+            {% if admin or is_this_teacher %}
+                <div class="row"><div class="col-xs-6 text-right"><b>BC Address:</b></div><div class="col-xs-6 text-left">{{cur_teacher.bc_addr}}</div></div>
+                <br>
+                <form action="/edu/teacher/{{cur_teacher.id}}/edit">
+                    <div class="row"><div class="col-xs-12 text-center"><input type="submit" value="Edit Teacher"/></div></div>
+                </form>
+            {% endif %}
+
+            <!-- List out courses this teacher teaches -->
+            <br>
+            <div class="row"><div class="col-xs-12 text-center"><b>Courses Teached</b></div></div>
+            {% for course in courses_teached %}
+                <div class="row"><div class="col-xs-12 text-center"><a href="/edu/course/{{course.id}}">{{course.title}} ({{course.year}})</a></div></div>
+            {% endfor %}
+
+        {% endif %}
+    </div>
+{% endblock %}

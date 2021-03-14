@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% load static %}
+    <!-- Container - User Payments -->
+    <div id="user-payments" class="container">
+        <div class="row text-center">
+            <div class="col-xs-12">
+                {% if user.is_authenticated %}
+                <p><b><a href="/user/{{user.id}}">{{user.first_name}} {{user.last_name}} ({{user.username}})</a> | <a href="/logout/">Logout</a></b></p>
+                {% endif %}
+                <h3><a href="/"><img src="{% static 'main/Innit.png'%}" class="img-responsive center-block"></a></h3>
+                <h3>{{current_user.first_name}} {{current_user.last_name}}</h3>
+            </div>
+        </div>
+        
+        <!-- Display a list of all teams which have an outstanding balance -->
+        {% if players %}
+            <br>
+            <div class="row text-center"><div class="col-xs-12"><font color="green"><b>Outstanding Team Balances</b></font></div></div>
+            <div class="row text-left">
+                <div class="col-xs-12">
+                   <table class="table text-left">
+                    <thead>
+                      <tr>
+                        <th>Season</th>
+                        <th>Team</th>
+                        <th>Team Balance</th>
+                        <th>Due</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    {% for player in players %}
+                      <tr>
+                        <td><a href="/volleyball/season/{{player.season.id}}" class="text-center">{{player.season.name}}</a></td>
+                        <td><a href="/volleyball/season/{{player.season.id}}/team/{{player.player_team.id}}" class="text-center">{{player.player_team.name}}</a></td>
+                        <td><font color="red">${{player.player_team.balance}}</font>* (<a href="/volleyball/season/{{player.season.id}}/team_payment/{{player.player_team.id}}" class="text-center">Pay Fee</a>)</td>
+                        <td><font color="red">{{player.season.reg_end_date}}</font></td>
+                      </tr>
+                    {% endfor %}
+                    </tbody>
+                  </table>
+                  <p><i>*Partial payments are possible from every member of a team!</i></p>
+                </div>
+            </div>
+            <br>
+        {% endif %}
+        
+        <!-- Display a list of historical payments this user has made -->
+        <br>
+        <div class="row text-center"><div class="col-xs-12"><font color="green"><b>Processed Payments</b></font></div></div>
+        <div class="row text-left">
+            <div class="col-xs-12">
+               <table class="table text-left">
+                <thead>
+                  <tr>
+                    <th>Order ID</th>
+                    <th>Description</th>
+                    <th>Amount</th>
+                  </tr>
+                </thead>
+                <tbody>
+                {% for order in orders %}
+                  <tr>
+                    <td>{{order.id}}</td>
+                    <td>{{order.description}}</td>
+                    <td>${{order.amount}}</td>
+                  </tr>
+                {% endfor %}
+                </tbody>
+              </table>
+              <p><i>*Payments made before January 24th, 2018 may not yet be visible.</i></p>
+            </div>
+        </div>
+        
+        <!-- TODO: Pickleball -->
+    </div>
+{% endblock %}

@@ -1,0 +1,78 @@
+{% extends 'baseedu.html' %}
+
+{% block content %}
+    {% load static %}
+    <!-- Container - Course -->
+    <div id="administrator" class="container">
+
+        <!-- Login and Logo -->
+        <div class="row text-center">
+            <div class="col-xs-12">
+                {% if user.is_authenticated %}
+                <p><b><a href="/user/{{user.id}}">{{user.first_name}} {{user.last_name}} ({{user.username}})</a> | <a href="/logout/">Logout</a></b></p>
+                {% else %}
+                <p><b><a href="/login/">Login</a> | <a href="/signup/">Register</a></b></p>
+                {% endif %}
+                <h3><a href="/edu"><img src="{% static 'main/Edu.png'%}" class="img-responsive center-block"></a></h3>
+            </div>
+        </div>
+        <div class="row text-center">
+            <div class="col-xs-12">
+                <p class="bg-danger"><b>{{error_message}}</b></p>
+            </div>
+        </div>
+
+        <!-- Check for whether to present editing form -->
+        {% if admin_id == "new" or editing == True %}
+            <!-- Only proceed if this is an admin -->
+            {% if admin %}
+                <!-- Present the editing form -->
+                <div class="row text-center">
+                    <div class="col-xs-12">
+                        {% if admin_id == "new" %}
+                        <h3>New Administrator Registration</h3>
+                        {% elif editing == True %}
+                        <h3>Edit Existing Administrator</h3>
+                        {% endif %}
+                        <br>
+                    </div>
+                </div>
+                <form action="/edu/administrator/{{admin_id}}" method="post">
+                    {% csrf_token %}
+                    {% for field in form %}
+                        <div class="row">
+                            <div class="col-xs-6 text-right"><b>{{field.label_tag}}</b></b></div><div class="col-xs-6 text-left">{{field}}</div>
+                        </div>
+                    {% endfor %}
+                    <br>
+                    <div class="row"><div class="col-xs-12 text-center"><input type="submit" value="Save" /></div></div>
+                </form>
+            {% endif %}
+        {% else %}
+
+            <!-- Otherwise, display current information -->
+            <div class="row text-center">
+                <div class="col-xs-12">
+                    <a href="/edu/alladmins" style="color:black"><h3>School Administrators</h3></a>
+                    <h2>{{cur_admin.first_name}} {{cur_admin.last_name}}</h2>
+                </div>
+            </div>
+            <div class="row"><div class="col-xs-6 text-right"><b>Email:</b></div><div class="col-xs-6 text-left">{{cur_admin.email}}</div></div>
+
+            <div class="row"><div class="col-xs-6 text-right"><b>Phone Number:</b></div><div class="col-xs-6 text-left">{{cur_admin.phone_number}}</div></div>
+            <div class="row"><div class="col-xs-6 text-right"><b>Gender:</b></div><div class="col-xs-6 text-left">{{cur_admin.gender}}</div></div>
+            <div class="row"><div class="col-xs-6 text-right"><b>Joined:</b></div><div class="col-xs-6 text-left">{{cur_admin.date_joined}}</div></div>
+            <div class="row"><div class="col-xs-6 text-right"><b>Biography:</b></div><div class="col-xs-6 text-left">{% if cur_admin.bio %}{{cur_student.bio}}{% endif %}</div></div>
+
+            <!--Only display an Edit button if this is an administrator -->
+            {% if admin %}
+                <div class="row"><div class="col-xs-6 text-right"><b>BC Address:</b></div><div class="col-xs-6 text-left">{{cur_admin.bc_addr}}</div></div>
+                <br>
+                <form action="/edu/administrator/{{cur_admin.id}}/edit">
+                    <div class="row"><div class="col-xs-12 text-center"><input type="submit" value="Edit Administrator"/></div></div>
+                </form>
+            {% endif %}
+            
+        {% endif %}
+    </div>
+{% endblock %}

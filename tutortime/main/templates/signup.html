@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% load static %}
+    <!-- Container - User Signup -->
+    <div id="sign-up" class="container">
+        <div class="row text-center">
+            <div class="col-xs-12">
+            <h3><a href="/"><img src="{% static 'main/Innit.png'%}" class="img-responsive center-block"></a></h3>
+            <h2>Sign Up</h2>
+            <p>By joining <b>INNIT</b>, you'll gain future access to all of our leagues and activities. From sand volleyball, to pickleball, to organized hikes and other group adventures. We're happy to have you join our growing, active community!</p>
+            <p><i>"Life is an Adventure better Lived when You are INNIT!"</i></p>
+            </div>
+        </div>
+        <br>
+        <div class="row text-center"></div>
+            <div class="col-xs-12">
+                <a href="{% url 'social:begin' 'facebook' %}"><img src="{% static 'main/FacebookSignup.png'%}" class="img-responsive center-block"></a>
+                <p>Sign up with <strong>Facebook</strong> to make logging in a snap!</p>
+                <p>Or, signup with a non-linked account below:</p>
+            </div>
+        </div>
+        <form method="post" enctype="multipart/form-data">
+         {% csrf_token %}
+         {% for field in form %}
+             <div class="row text-center">
+                 <div class="col-xs-6 text-right"><b>{{ field.label_tag }}</b></div><div class="col-xs-6 text-left">{{ field }}</div>
+             </div>
+             <div class="col-xs-12">
+                 {% for error in field.errors %}
+                     <p style="color: red">{{ error }}</p>
+                 {% endfor %}
+             </div>
+         {% endfor %}
+         {% for field in pform %}
+             <div class="row text-center">
+                 <div class="col-xs-6 text-right"><b>{% if field.name == 'phone_number' %}Phone Number (Optional):{% else %}{{ field.label_tag }}{% endif %}</b></div><div class="col-xs-6 text-left">{{ field }}</div>
+             </div>
+         {% endfor %}
+         <div class="row text-center">
+             <div class="col-xs-12">
+                 <br>
+                 <button type="submit">Sign Up</button>
+             </div>
+         </div>
+        </form>
+    </div>
+{% endblock %}

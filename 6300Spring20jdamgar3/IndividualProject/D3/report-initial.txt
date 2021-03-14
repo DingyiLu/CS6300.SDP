@@ -1,0 +1,53 @@
+JUnit version 4.12
+...E...E.E...E..E......E..E......E....E
+Time: 0.746
+There were 9 failures:
+1) encodeTest12(edu.gatech.seclass.encode.MyMainTest)
+edu.gatech.seclass.encode.SDPBugException: You found Bug #10. 
+Arguments used: [-k, @#$%^, C:\Users\JAMESD~1\AppData\Local\Temp\junit2862897580114345088\junit3501432116511672129.tmp]
+Original File:  
+Throws Exception: IndexOutOfBoundException
+2) encodeTest15(edu.gatech.seclass.encode.MyMainTest)
+edu.gatech.seclass.encode.SDPBugException: You found Bug #7. 
+Arguments used: [-w, knqtvKNQTV, -r, aBcDe, C:\Users\JAMESD~1\AppData\Local\Temp\junit16418813656545208109\junit12822258064686581643.tmp]
+Original File:  
+New File Content: 
+3) encodeTest16(edu.gatech.seclass.encode.MyMainTest)
+edu.gatech.seclass.encode.SDPBugException: You found Bug #10. 
+Arguments used: [-w, -d, $, -r,       , C:\Users\JAMESD~1\AppData\Local\Temp\junit11184217794134788974\junit16010618629823265068.tmp]
+Original File:  
+Throws Exception: IndexOutOfBoundException
+4) encodeTest19(edu.gatech.seclass.encode.MyMainTest)
+edu.gatech.seclass.encode.SDPBugException: You found Bug #11. 
+Arguments used: [-w, -d, ad9yz, -r, DeFGhi, -c, C:\Users\JAMESD~1\AppData\Local\Temp\junit9784604968726139355\junit2307708704465298692.tmp]
+Original File: @bcd$ 98&^ 
+New File Content: ^&8 $CB@
+5) encodeTest21(edu.gatech.seclass.encode.MyMainTest)
+edu.gatech.seclass.encode.SDPBugException: You found Bug #11. 
+Arguments used: [-w, -d, ad9yz, -k, cccZZ, -c, C:\Users\JAMESD~1\AppData\Local\Temp\junit9376063003851048961\junit13190537272031629622.tmp]
+Original File: @bcd$ 98&^ 
+New File Content: ^& $C@
+6) encodeTest27(edu.gatech.seclass.encode.MyMainTest)
+edu.gatech.seclass.encode.SDPBugException: You found Bug #11. 
+Arguments used: [-w, -d, ad9yz, -r, aBcDe, -c, C:\Users\JAMESD~1\AppData\Local\Temp\junit2626506073219032249\junit2686118021113290476.tmp]
+Original File: qwe1RTY2as 
+New File Content: tr1WQyS2
+7) encodeTest29(edu.gatech.seclass.encode.MyMainTest)
+edu.gatech.seclass.encode.SDPBugException: You found Bug #11. 
+Arguments used: [-w, -d, ad9yz, -k, weaXXZ, -c, C:\Users\JAMESD~1\AppData\Local\Temp\junit9957315047819041430\junit17367873020496851926.tmp]
+Original File: qwe1RTY2as 
+New File Content: EWy
+8) encodeTest5(edu.gatech.seclass.encode.MyMainTest)
+edu.gatech.seclass.encode.SDPBugException: You found Bug #11. 
+Arguments used: [-w, -d, knqtvKNQTV, -r, aBcDe, -c, C:\Users\JAMESD~1\AppData\Local\Temp\junit15927531993041536673\junit16035697686187216779.tmp]
+Original File: abc defgh ijklmno pqrstu vwxyz 123456 789 0AB CDEF GHIJKL MNOPQRS TUVWXYZ ~!@#$%^&*(){}[];':12,./<>? 
+New File Content: ?></.,21:';][}{)(*&^%$#@!~ zyxwu srpom ljihg f 0 987 654321 ZYXW USRP OMLJI HGF 
+9) encodeTest9(edu.gatech.seclass.encode.MyMainTest)
+edu.gatech.seclass.encode.SDPBugException: You found Bug #11. 
+Arguments used: [-w, -d, $&^)(, -r, DeFGhi, -c, C:\Users\JAMESD~1\AppData\Local\Temp\junit8596670438270653999\junit16561598947051363296.tmp]
+Original File: @bcd$ 98&^ 
+New File Content: 89 CB@
+
+FAILURES!!!
+Tests run: 30,  Failures: 9
+

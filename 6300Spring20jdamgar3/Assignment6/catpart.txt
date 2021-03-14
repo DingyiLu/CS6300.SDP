@@ -1,0 +1,51 @@
+# Input file with string text
+
+  File Length:
+    0.                        [single]
+    10.                       [property filewithcontent]
+    100.                      [property filewithcontent, filewithmuchcontent]
+    maxstring.                [single]
+
+  File Content:
+    all characters.           [if filewithcontent]
+    alphanumeric characters.  [if filewithcontent]
+    special characters.       [if filewithmuchcontent] [single]
+    whitespace characters.    [if filewithmuchcontent] [single]
+
+
+# Input string "delimiters"
+
+  Delimiter Length:
+    0.                        [property emptydelimiters]
+    5.
+    maxstring.                [if filewithmuchcontent] [single]
+
+  Delimiter Content:
+    alphanumeric characters.  [if !emptydelimiters]
+    special characters.       [if !emptydelimiters]
+    whitespace characters.    [if !emptydelimiters]
+
+
+# Input string "remove/keep letters"
+
+  Remove or Keep:
+    Remove.                   [property removeorkeep, remove]
+    Keep.                     [property removeorkeep, keep]
+    No Change.                [if filewithmuchcontent] [single]
+
+  Remove or Keep Length:
+    0.                        [if removeorkeep] [error]
+    5.                        [if removeorkeep]
+    maxstring.                [if removeorkeep && filewithmuchcontent] [single]
+
+  Remove or Keep Content:
+    alphanumeric characters.  [if removeorkeep]
+    special characters.       [if removeorkeep] [error]
+    whitespace characters.    [if removeorkeep] [error]
+
+
+# Input boolean "Reverse Capitalization"
+
+  Reverse Capitalization:
+    True.
+    False.

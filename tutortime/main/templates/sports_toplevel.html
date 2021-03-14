@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% load static %}
+    <!-- Container - Sports Section -->
+    <div id="sports" class="container">
+        <!-- Logo -->
+        <div class="row text-center">
+            <div class="col-xs-12">
+                {% if user.is_authenticated %}
+                <p><b><a href="/user/{{user.id}}">{{user.first_name}} {{user.last_name}} ({{user.username}})</a> | <a href="/logout/">Logout</a></b></p>
+                {% else %}
+                <p><b><a href="/login/">Login</a> | <a href="/signup/">Sign up with INNIT</a></b></p>
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- Top-level image -->
+        {% if top_photo %}
+            <div id="carousel" class="carousel slide" data-ride="carousel">
+                <!-- Menu -->
+                
+                <!-- ***Uncomment to add menu indicator
+                <ol class="carousel-indicators">
+                    <li data-target="#carousel" data-slide-to="0" class="active"></li>
+                    <li data-target="#carousel" data-slide-to="1"></li>
+                </ol>
+                -->
+                
+                <!-- Items -->
+                <div class="carousel-inner">
+                    <div class="item active inactiveUntilOnLoad">
+                        <img src="{{top_photo.image.url}}" alt="Slide 1" />
+                    </div>
+                    <!--  ***Just add more slides like this:
+                    <div class="item">
+                        <img src="{{top_photo.image.url}}" alt="Slide 2" />
+                    </div> 
+                    -->
+                </div> 
+                <!-- ***Uncomment to add navigation glyphs
+                <a href="#carousel" class="left carousel-control" data-slide="prev">
+                    <span class="glyphicon glyphicon-chevron-left"></span>
+                </a>
+                <a href="#carousel" class="right carousel-control" data-slide="next">
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                </a>
+                -->
+            </div>
+        {% endif %}
+        
+        <!-- Current Seasons - alert if not registered -->
+        <div class="row text-center">
+            <div class="col-xs-12">
+                <h3><a href="/volleyball"><img src="{% static 'main/InnitVolleyball.png'%}" class="img-responsive center-block"></a></h3>
+            </div>
+        </div>
+        <div class="row text-center">
+            <div class="col-xs-12">
+                <h3><a href="/pickleball"><img src="{% static 'main/InnitPickleball.png'%}" class="img-responsive center-block"></a></h3>
+            </div>
+        </div>
+        <br>
+        <div class="row text-center">
+            <div class="col-xs-1"></div>
+            <div class="col-xs-10">
+                <p>With <b>INNIT</b>, you have access to all of our leagues and activities. From sand volleyball, to pickleball, to organized hikes and other group adventures. We're happy to have you be a member of our growing, active community!</p>
+            </div>
+            <div class="col-xs-1"></div>
+        </div>
+    </div>
+{% endblock %}

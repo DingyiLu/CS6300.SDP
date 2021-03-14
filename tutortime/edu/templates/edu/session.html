@@ -1,0 +1,738 @@
+{% extends 'baseedu.html' %}
+
+{% block content %}
+    {% load static %}
+    <!-- Container - Tutoring Session -->
+    <div id="session" class="container">
+
+        <!-- Login and Logo -->
+        <div class="row text-center">
+            <div class="col-xs-12">
+                {% if user.is_authenticated %}
+                <p><b><a href="/user/{{user.id}}">{{user.first_name}} {{user.last_name}} ({{user.username}})</a> | <a href="/logout/">Logout</a></b></p>
+                {% else %}
+                <p><b><a href="/login/">Login</a> | <a href="/signup/">Register</a></b></p>
+                {% endif %}
+                <h3><a href="/edu"><img src="{% static 'main/Edu.png'%}" class="img-responsive center-block"></a></h3>
+            </div>
+        </div>
+        <div class="row text-center">
+            <div class="col-xs-12">
+                <p class="bg-danger"><b>{{error_message}}</b></p>
+            </div>
+        </div>
+
+        <!-- Tutoring session information -->
+        <div class="row"><div class="col-xs-12 text-center"><h2>Tutoring Session</h2></div></div>
+        <div class="row"><div class="col-xs-6 text-right"><b>Room Name:</b></div><div class="col-xs-6 text-left">{{room_name}}</div></div>
+        <div class="row"><div class="col-xs-6 text-right"><b>Tutor:</b></div><div class="col-xs-6 text-left" id="tutor-info">{% if tutor %}{{tutor_string}}{% else %}<font color="blue"><b><i>Waiting for Tutor</i></b></font>{% endif %}</div></div>
+        <div class="row"><div class="col-xs-6 text-right"><b>Tutee:</b></div><div class="col-xs-6 text-left" id="tutee-info">{% if tutee %}{{tutee_string}}{% else %}<font color="blue"><b><i>Waiting for Tutee</i></b></font>{% endif %}</div></div>
+        <div class="row"><div class="col-xs-6 text-right"><b>Session Time:</b></div><div class="col-xs-6 text-left" id="session-timer"><i>Not Started</i></div></div>
+        <div class="row"><div class="col-xs-12 text-center"><b><i><div id="state-text"></div></i></b></div></div>
+        <div class="row"><div class="col-xs-12 text-center"><input id="start-session-button" class="hidden" type="button" value="Start Session"/></div></div>
+        <div class="row"><div class="col-xs-12 text-center"><input id="end-session-button" class="hidden" type="button" value="End Session"/></div></div>
+        <br>
+
+        <!-- Chat log, input text field, and submit button -->
+        <div class="row"><div class="col-xs-12 text-center"><textarea id="chat-log" cols="100" rows="10" class="input-sm" readonly></textarea></div></div>
+        <div class="row"><div class="col-xs-12 text-center"><input id="chat-message-input" type="text" size="50" class="input-lg" /></div></div>
+        <div class="row"><div class="col-xs-12 text-center"><input id="chat-message-submit" type="button" value="Send"/></div></div>
+        <br>
+
+        <!-- Display area specific to tutors or tutees -->
+
+        <!-- For the tutor, display a drop-down listing of their grade-specific problems to select from and a display for the problem/solution -->
+        <div id="tutor-problem-listing" class="hidden">
+            <!-- The dropdown listing -->
+            <select id="tutor-problem-dropdown">
+                <option value="none">---</option>
+                {% for problem in tutor_problems %}
+                    <option value="{{problem.id}},{{problem.problem_url}},{{problem.solution_url}}">Problem ID={{problem.id}} (Grade={{problem.grade}})</option>
+                {% endfor %}
+            </select>
+            <!-- The display port for the problem and solution -->
+            <div id="tutor-problem-port"> 
+                <div class="row"><div class="col-xs-6 text-right"><b>Problem</b></div><div class="col-xs-6 text-left"><b>Solution</b></div></div>
+                <div class="row"><div class="col-xs-6 text-right panel panel-default"><img id="problem-image" class="img-responsive center-block" /></div><div class="col-xs-6 text-left panel panel-default"><img id="solution-image" class="img-responsive center-block" /></div></div>
+            </div>
+            <input id="tutor-problem-send" type="button" value="Send Problem to Tutee"/>
+        </div>
+
+        <!-- For the tutee, display an area containing the currently selected problem and a canvas to draw an answer -->
+        <div id="tutee-answer-pane" class="hidden">
+            <!-- The display port for the problem and answer attempt -->
+            <div id="tutee-answer-port"> 
+                <div class="row"><div class="col-xs-6 text-right"><b>Problem</b></div><div class="col-xs-6 text-left"><b>Answer</b></div></div>
+                <div class="row"><div class="col-xs-6 text-right panel panel-default"><img id="problem-image-tutee" class="img-responsive center-block" /></div><div class="col-xs-6 text-left panel panel-default"><canvas id="answerCanvas"></canvas></div></div>
+            </div>
+            <input id="tutee-answer-send" type="button" value="Send Answer to Tutor"/>
+            <input id="tutee-answer-request-new" type="button" value="Request New Problem"/>
+        </div>
+
+        <!-- For both, this will be the pane that shows the problem, solution, and answer within a single view -->
+        <div id="tutor-tutee-complete-pane" class="hidden">
+            <!-- The display port for the problem and answer attempt -->
+            <div id="tutor-tutee-complete-port"> 
+                <div class="row"><div class="col-xs-4 text-center"><b>Problem</b></div><div class="col-xs-4 text-center"><b>Solution</b></div><div class="col-xs-4 text-center"><b>Answer</b></div></div>
+                <div class="row"><div class="col-xs-4 text-center panel panel-default"><img id="problem-image-complete" class="img-responsive center-block" /></div><div class="col-xs-4 text-center panel panel-default"><img id="solution-image-complete" class="img-responsive center-block" /></div><div class="col-xs-4 text-center panel panel-default"><img id="answer-image-complete" class="img-responsive center-block" /></div></div>
+            </div>
+            {% if tutor %}
+                <!-- For the tutor, display a button to complete the review and proceed to picking the next problem -->
+                <input id="tutor-complete-review" type="button" value="Done Reviewing"/>
+            {% else %}
+                <!-- Hide for a tutee  -->
+                <input id="tutor-complete-review" type="button" class="hidden" value="Done Reviewing"/>
+            {% endif %}
+        </div>
+
+
+        <!-- Session page logic script -->
+        <script>
+
+            // State related variables for this instance
+            var roomName    = {{ room_name_json }};   // Room name for WebSockets connection
+            var studentName = "{{ student_name }}";   // This student's name
+            var startTime, endTime, diffMS, seconds;
+            var started     = false;            // Has session started yet?
+            var ended       = false;            // Has session ended yet?
+            var full        = false;            // Do we have two students ready to go?
+            var paired      = false;            // Successfully PAIR'd to the peer?
+            var tuteeAnsweringProblem = false;  // Tutee currently answering a problem?
+            var tutorReviewingAnswer  = false;  // Tutor currently reviewing answer?
+
+            // Current IDs and URLs
+            var problemID     = "";
+            var problemURL    = "";
+            var solutionURL   = "";
+            var answerID      = "";
+            var answerURL     = "";
+            var problemIDList = [];  // Only needed for tutor
+            var answerIDList  = [];  // Only needed for tutor
+
+            // Session tutor and tutee information
+            var sessionTutor = "";
+            var sessionTutee = "";
+            var tutorID      = "";
+            var tuteeID      = "";
+            var isTutor      = false;
+            {% if tutor %}
+                sessionTutor = "{{ tutor_string }}";
+                tutorID      = "{{ tutor.id }}";
+                isTutor      = true;
+            {% endif %}
+            {% if tutee %}
+                sessionTutee = "{{ tutee_string }}";
+                tuteeID      = "{{ tutee.id }}";
+            {% endif %}
+
+            // WebSocket for chat connection
+            var chatSocket = new WebSocket('ws://' + window.location.host + '/ws/chat/' + roomName + '/');
+
+
+            // **********************
+            // Utility Functions
+            // **********************
+
+            // Send a verb to the peer.
+            // Uses a custom verb protocol to drive stateful communication.
+            // Supported verbs:
+            //    CHAT   -- convey a chat message in 'message' field
+            //    PAIR   -- attempt to pair with the peer with 'tutor' and 'tutee' fields
+            //    START  -- Tutor is starting a tutoring session
+            //    END    -- Tutor is ending a tutoring session
+            //    PPROB  -- Tutor picked a specific problem. 'message' is problem image URL
+            //    SPROB  -- Tutee has filled in an answer and submitted it for the current problem. 'message' is answer URL
+            //    NPROB  -- Tutee is requesting a new problem instead of the current problem
+            function sendVerb(verb, tutor, tutee, tutorID, tuteeID, message) {
+                // Log this verb
+                console.log("SENDING VERB:\nverb: >" + verb + "<\ntutor: >" + tutor + "<\ntutee: >" + tutee + "<\ntutorID: >" + tutorID + "<\ntuteeID: >" + tuteeID + "<\nmessage: >" + message + "<\n");
+                chatSocket.send(JSON.stringify({
+                    'verb':    verb,
+                    'tutor':   tutor,
+                    'tutee':   tutee,
+                    'tutorID': tutorID,
+                    'tuteeID': tuteeID,
+                    'message': message
+                }));
+            };
+
+            // Format hour:minute:second
+            function getHHMMSS(h, m, s) {
+                result = "";
+                if( h < 10 ) { result += "0" + h + ":"; }
+                else         { result += h + ":";       }
+                if( m < 10 ) { result += "0" + m + ":"; }
+                else         { result += m + ":";       }
+                if( s < 10 ) { result += "0" + s;       }
+                else         { result += s;             }
+                return result;
+            };
+
+            // Function to repeatedly update a clock within the page
+            function updateTimer() {
+                var now = new Date();
+                seconds = Math.floor((now.getTime() / 1000) - (startTime.getTime() / 1000));
+                // Determine hours, minutes, seconds
+                var tmp = seconds;
+                var h = Math.floor(tmp / (3600));
+                tmp = tmp % 3600;
+                var m = Math.floor(tmp / 60);
+                tmp = tmp % 60;
+                var s = tmp;
+                var hhmmss = getHHMMSS(h, m, s);
+                // Update the relevant field
+                document.getElementById('session-timer').innerHTML = hhmmss;
+            };
+
+            // Send a chat message.
+            // Use an empty string ('') for person for an anonymous log message.
+            function sendChatMessage(person, messageText) {
+                var today = new Date();
+                var h = today.getHours();
+                var m = today.getMinutes();
+                var s = today.getSeconds();
+                var hhmmss = getHHMMSS(h, m, s);
+                var message = person + " (" + hhmmss + "):  " + messageText;
+                // Send chat message to peer
+                sendVerb('CHAT', '', '', '', '', message);
+            };
+
+            // Function to set the appropriate tutoring session "state" text and color
+            function updateStateText(text, color) {
+                var state = document.getElementById("state-text");
+                state.innerHTML   = text;
+                state.style.color = color;
+            };
+
+
+            // **********************
+            // Tutor Session Functions
+            // **********************
+
+            // Start a tutoring session
+            function tutorStartSession() {
+                // Display state
+                updateStateText("Started", "green");
+                // Record that session started and send message to tutee
+                started = true;
+                startTime = new Date();
+                seconds = 0;
+                sendVerb('START', '', '', '', '', '');
+                // Start timer that increments every second for a clock
+                setInterval('updateTimer()', 1000);
+                // Note in the chat log that the session has started
+                sendChatMessage("", "***** Tutor started session *****");
+            };
+
+            // Function for ending a session
+            function tutorEndSession() {
+                // Display state
+                updateStateText("Ending", "red");
+                // Calculate accurate times for endTime and seconds
+                endTime = new Date();
+                diffMS = endTime.getTime() - startTime.getTime();
+                seconds = Math.round(diffMS / 1000);
+                // Note in the chat log that the session has ended
+                sendChatMessage("", "***** Tutor ended session *****");
+                // Call AJAX function to create new session record
+                tutorCreateSessionRecord();
+                // Let the other side know we're ending
+                sendVerb('END', '', '', '', '', '');
+                // Redirect to the home page.
+                window.location.href = "/edu";
+            };
+
+            // AJAX function to create a new session record for review
+            function tutorCreateSessionRecord() {
+                console.log("ENTER: tutorCreateSessionRecord()");
+                // Setup synchronous AJAX request
+                var ajax = new XMLHttpRequest();
+                var url = "/edu/ajax/createsession";
+                // Fill in form data
+                var data = new FormData();
+                data.append("tutorID", tutorID );
+                data.append("tuteeID", tuteeID );
+                data.append("start", Math.floor(startTime.getTime() / 1000));   // Convert to epoch seconds
+                data.append("end", Math.floor(endTime.getTime() / 1000));       // Convert to epoch seconds
+                data.append("duration", seconds );
+                data.append("problemIDList", problemIDList );
+                data.append("answerIDList", answerIDList );
+                data.append("chatLog", document.querySelector('#chat-log').value);
+                // Setup request appropriately, send, and wait for response
+                ajax.open('POST', url, false);
+                ajax.send(data);
+                if(ajax.status === 200) {
+                    console.log("EXIT: tutorCreateSessionRecord() -- SUCCESS");
+                }
+                else {
+                    console.log("EXIT: tutorCreateSessionRecord() -- FAILURE, RC=" + ajax.status);
+                }
+            };
+
+            // Function to send the current problem to the peer tutee
+            function tutorSendProblem() {
+                // Display state
+                updateStateText("Working Problem", "orange");
+                // Send problem
+                sendVerb('PPROB', '', '', '', '', problemID + "," + problemURL + "," + solutionURL);
+                // Update state
+                tuteeAnsweringProblem = true;
+                // Record problem in session
+                problemIDList.push(problemID);
+                // Note in the chat log that this problem was sent
+                sendChatMessage("", "***** Tutor sent problem ID=" + problemID + " *****");
+            };
+
+            // Function to react to a tutee sending a new answer
+            function tutorReactSendAnswer(newAnswerMessage) {
+                // Display state
+                updateStateText("Reviewing Problem", "blue");
+                // Update state
+                tuteeAnsweringProblem = false;
+                tutorReviewingAnswer  = true;
+                var answerData = newAnswerMessage.split(',');
+                answerID       = answerData[0];
+                answerURL      = answerData[1];
+                // Hide the problem and solution pane picker for the tutor.
+                // This is logically replaced by the problem/solution/answer pane.
+                document.getElementById("tutor-problem-listing").classList.toggle("hidden");
+                // Show the problem, solution, and answer attempt in a single pane
+                // so that the tutor and tutee can have a conversation within the chat.
+                document.getElementById("problem-image-complete").src = problemURL;
+                document.getElementById("solution-image-complete").src = solutionURL;
+                document.getElementById("answer-image-complete").src = answerURL;
+                document.getElementById("tutor-tutee-complete-pane").classList.toggle("hidden");
+                // Record answer in session
+                answerIDList.push(answerID);
+            };
+
+            // Function to react to a tutee requesting a new problem instead
+            // of answering the current one
+            function tutorReactRequestNewProblem() {
+                // Display state
+                updateStateText("Started", "green");
+                // Update state
+                tuteeAnsweringProblem = false;
+                tutorReviewingAnswer = false;
+                // At this point the tutor can choose a new problem or send over the same
+                // problem to the tutee using their picker.
+            };
+
+            // Function for a tutor to complete the current review and proceed
+            // on to the next problem
+            function tutorCompleteReview() {
+                // Display state
+                updateStateText("Started", "green");
+                // Change state
+                tutorReviewingAnswer = false;
+                // Let the tutee know we've completed the review and log a chat message
+                sendVerb('RPROB', '', '', '', '', '');
+                sendChatMessage("", "***** Review complete for problem ID=" + problemID + ", answer ID=" + answerID + " *****");
+                // Hide the problem, solution, and answer pane
+                document.getElementById("tutor-tutee-complete-pane").classList.toggle("hidden");
+                // Show the problem picker pane
+                document.getElementById("tutor-problem-listing").classList.toggle("hidden");
+            }
+
+
+            // **********************
+            // Tutee Session Functions
+            // **********************
+
+            // Reacting start function for a tutee
+            function tuteeReactStartSession() {
+                // Display state
+                updateStateText("Started", "green");
+                // Reveal the answering pane
+                document.getElementById("tutee-answer-pane").classList.toggle("hidden");
+                // Record that the session has started
+                started = true;
+                startTime = new Date();
+                seconds = 0;
+                // Start timer that increments every second for a clock
+                setInterval('updateTimer()', 1000);
+            };
+
+            // Reacting for ending a session
+            function tuteeReactEndSession() {
+                // Display state
+                updateStateText("Ending", "red");
+                // The tutee doesn't need to do any recording.
+                // Redirect to the home page.
+                window.location.href = "/edu";
+            };
+
+            // AJAX function to create a new problem answer.
+            // This also fills in the local answerURL from the response.
+            function tuteeCreateAnswerRecord() {
+                console.log("ENTER: tuteeCreateAnswerRecord()");
+                // Fetch answer canvas data
+                var canvas = document.getElementById('answerCanvas');
+                var canvasData = canvas.toDataURL();
+                // Setup synchronous AJAX request
+                var ajax = new XMLHttpRequest();
+                var url = "/edu/ajax/createanswer";
+                // Fill in form data
+                var data = new FormData();
+                data.append("problemID", problemID );
+                data.append("tuteeID", tuteeID );
+                data.append("answerImgBase64", canvasData );
+                // Setup request appropriately, send, and wait for response
+                ajax.open('POST', url, false);
+                ajax.send(data);
+                // Parse answer data: answerID, answerURL
+                var answerData = JSON.parse(ajax.responseText);
+                if(ajax.status === 200) {
+                    answerID  = answerData["answerID"];
+                    answerURL = answerData["answerURL"];
+                    console.log("EXIT: tuteeCreateAnswerRecord() -- SUCCESS");
+                }
+                else {
+                    console.log("EXIT: tuteeCreateAnswerRecord() -- FAILURE, RC=" + ajax.status);
+                }
+            };
+
+            // Reacting to being directed by tutor to answer a new problem
+            function tuteeReactSendProblem(message) {
+                // Display state
+                updateStateText("Working Problem", "orange");
+                // Parse out the problem ID and problem/solution URLs from the message
+                problemInfo = message.split(',');
+                problemID   = problemInfo[0];
+                problemURL  = problemInfo[1];
+                solutionURL = problemInfo[2];
+                // Update state
+                tuteeAnsweringProblem = true;
+                // Hide the problem/solution/answer pane if the previous state
+                // had been that the tutor was reviewing a problem
+                if(tutorReviewingAnswer === true) {
+                    tutorReviewingAnswer = false;
+                    document.getElementById("tutor-tutee-complete-pane").classList.toggle("hidden");
+                }
+                // Update the answering pane for this new problem
+                document.getElementById("problem-image-tutee").src  = problemURL;
+                // Clear answer canvas
+                var canvas = document.getElementById('answerCanvas');
+                var context = canvas.getContext("2d");
+                context.clearRect(0, 0, canvas.width, canvas.height);
+            };
+
+            // Function to perform synchronous AJAX call to record a problem
+            // answer and then to pass the answer URL to the peer tutor for review
+            function tuteeSendAnswer() {
+                // Display state
+                updateStateText("Reviewing Problem", "blue");
+                console.log("ENTER: tuteeSendAnswer()");
+                // Record answer
+                tuteeCreateAnswerRecord();
+                // Send the answer URL to the peer tutor
+                sendVerb('SPROB', '', '', '', '', answerID + ',' + answerURL);
+                // Change state
+                tuteeAnsweringProblem = false;
+                tutorReviewingAnswer = true;
+                // Clear problem image
+                document.getElementById("problem-image-tutee").src  = "";
+                // Clear answer canvas
+                var canvas = document.getElementById('answerCanvas');
+                var context = canvas.getContext("2d");
+                context.clearRect(0, 0, canvas.width, canvas.height);
+                // Hide the answer pane
+                document.getElementById("tutee-answer-pane").classList.toggle("hidden");
+                // Show the problem, solution, and answer attempt in a single pane
+                // so that the tutor and tutee can have a conversation within the chat.
+                document.getElementById("problem-image-complete").src = problemURL;
+                document.getElementById("solution-image-complete").src = solutionURL;
+                document.getElementById("answer-image-complete").src = answerURL;
+                document.getElementById("tutor-tutee-complete-pane").classList.toggle("hidden");
+                // Note in the chat log that this answer was sent
+                sendChatMessage("", "***** Tutee sent answer ID=" + answerID + " *****");
+                console.log("EXIT: tuteeSendAnswer()");
+            };
+
+            // Function of a tutee to request a new problem from the tutor.
+            function tuteeRequestNewProblem() {
+                // Display state
+                updateStateText("Started", "green");
+                console.log("ENTER: tuteeRequestNewProblem()");
+                // Send appropriate verb to the peer tutor
+                sendVerb('NPROB', '', '', '', '', '');
+                // Change state
+                tuteeAnsweringProblem = false;
+                // Clear problem image
+                document.getElementById("problem-image-tutee").src  = "";
+                // Clear answer canvas
+                var canvas = document.getElementById('answerCanvas');
+                var context = canvas.getContext("2d");
+                context.clearRect(0, 0, canvas.width, canvas.height);
+                // Note in the chat log that a new problem was requested
+                sendChatMessage("", "***** Tutee requested new problem *****");
+                console.log("EXIT: tuteeRequestNewProblem()");
+            };
+
+            // Function to react to a tutor completing a review
+            function tuteeReactCompleteReview() {
+                // Display state
+                updateStateText("Started", "green");
+                // Change state
+                tutorReviewingAnswer = false;
+                // Hide the problem, solution, and answer pane
+                document.getElementById("tutor-tutee-complete-pane").classList.toggle("hidden");
+                // Reveal the answering pane
+                document.getElementById("tutee-answer-pane").classList.toggle("hidden");
+            };
+
+
+            // **********************
+            // WebSocket Communication Functions
+            // **********************
+
+            // Receive and process a message on the socket
+            chatSocket.onmessage = function(e) {
+
+                // Extract verb data
+                var data    = JSON.parse(e.data);
+                var verb    = data['verb'];
+                var tutor   = data['tutor'];
+                var tutee   = data['tutee'];
+                var inTutorID   = data['tutorID'];
+                var inTuteeID   = data['tuteeID'];
+                var message = data['message'];
+
+                 // Log this verb
+                console.log("RECEIVING VERB:\nverb: >" + verb + "<\ntutor: >" + tutor + "<\ntutee: >" + tutee + "<\ntutorID: >" + tutorID + "<\ntuteeID: >" + tuteeID + "<\nmessage: >" + message + "<\n");
+
+                // Behavior differs based on verb
+                if(verb === "CHAT") {
+                    // Only if the message is not empty
+                    if(message !== "") {
+                        // Normal chat message for the chat window
+                        var textarea = document.querySelector('#chat-log');
+                        textarea.value += (message + '\n');
+                        // Make sure to auto-scroll to the bottom of the box
+                        textarea.scrollTop = textarea.scrollHeight;
+                    }
+                }
+                else if(verb === "PAIR") {
+                    // Fill in blank information if we don't have it
+                    if(sessionTutor === "" && typeof tutor !== 'undefined' && tutor !== "") {
+                        console.log("Setting tutor");
+                        sessionTutor = tutor;
+                        tutorID = inTutorID;
+                        document.getElementById('tutor-info').innerHTML = sessionTutor;
+                        // Send along potentially new information to new peer providing us with information
+                        sendVerb('PAIR', sessionTutor, sessionTutee, tutorID, tuteeID, '');
+                    }
+                    if(sessionTutee === "" && typeof tutee !== 'undefined' && tutee !== "") {
+                        console.log("Setting tutee");
+                        sessionTutee = tutee;
+                        tuteeID = inTuteeID;
+                        document.getElementById('tutee-info').innerHTML = sessionTutee;
+                        // Send along potentially new information to new peer providing us with information
+                        sendVerb('PAIR', sessionTutor, sessionTutee, tutorID, tuteeID, '');
+                    }
+                    // If we are the tutor and both tutor and tutee are set, display the "start"
+                    // session button if we haven't already
+                    if(full == false && isTutor == true && started == false && sessionTutor !== '' && sessionTutee !== '') {
+                        full = true;
+                        console.log("Displaying start button for tutor");
+                        document.getElementById("start-session-button").classList.toggle("hidden");
+                    }
+                }
+                else if(verb === "START") {
+                    // Message coming from the tutor to start the session
+                    if(isTutor == false) {
+                        // Making sure we're a tutee..
+                        tuteeReactStartSession();
+                    }
+                }
+                else if(verb === "END") {
+                    // Message coming from the tutor to end the session
+                    if(isTutor == false) {
+                        // Making sure we're a tutee..
+                        tuteeReactEndSession();
+                    }
+                }
+                else if(verb === "PPROB") {
+                    // Message coming from the tutor to answer a new problem
+                    if(isTutor == false) {
+                        // Making sure we're a tutee..
+                        tuteeReactSendProblem(message);
+                    }
+                }
+                else if(verb === "SPROB") {
+                    // Message coming from the tutee answering a problem
+                    if(isTutor == true) {
+                        // Making sure we're a tutor..
+                        tutorReactSendAnswer(message);
+                    }
+                }
+                else if(verb === "NPROB") {
+                    // Message coming from the tutee asking for a new problem
+                    if(isTutor == true) {
+                        // Making sure we're a tutor..
+                        tutorReactRequestNewProblem();
+                    }
+                }
+                else if(verb === "RPROB") {
+                    // Message coming from the tutor completing the review of a problem/solution/answer
+                    if(isTutor == false) {
+                        // Making sure we're a tutee..
+                        tuteeReactCompleteReview();
+                    }
+                }
+            };
+
+            // On socket close, print error
+            chatSocket.onclose = function(e) {
+                console.error('Chat socket closed unexpectedly');
+            };
+
+            // Send an initial pairing request when we first open the socket
+            chatSocket.onopen = function() {
+                sendVerb('PAIR', sessionTutor, sessionTutee, tutorID, tuteeID, '');
+            };
+
+
+            // **********************
+            // Browser Interaction Functions
+            // **********************
+
+            // Chat message input
+            document.querySelector('#chat-message-input').focus();
+            document.querySelector('#chat-message-input').onkeyup = function(e) {
+                if (e.keyCode === 13) {  // enter, return
+                    document.querySelector('#chat-message-submit').click();
+                }
+            };
+            document.querySelector('#chat-message-submit').onclick = function(e) {
+                var messageInputDom = document.querySelector('#chat-message-input');
+                // Send chat message to peer
+                sendChatMessage(studentName, messageInputDom.value);
+                // Reset input
+                messageInputDom.value = '';
+            };
+
+            // Tutor's "start session" button
+            document.querySelector('#start-session-button').onclick = function(e) {
+                // Start the tutoring session, including sending a message to the tutee peer
+                tutorStartSession();
+                // Hide the start button
+                document.getElementById("start-session-button").classList.toggle("hidden");
+                // Reveal the end button and tutoring problem selection area
+                document.getElementById("end-session-button").classList.toggle("hidden");
+                document.getElementById("tutor-problem-listing").classList.toggle("hidden");
+            };
+
+            // Tutor's "end session" button
+            document.querySelector('#end-session-button').onclick = function(e) {
+                // End the tutoring session
+                tutorEndSession();
+            };
+
+            // Tutor's problem selection dropdown selector
+            document.querySelector('#tutor-problem-dropdown').onchange = function(e) {
+                // Fetch problem ID, problem URL, and solution URL from selection
+                var selectedProblemData = document.querySelector('#tutor-problem-dropdown').value.split(','); 
+                problemID   = selectedProblemData[0];
+                problemURL  = selectedProblemData[1];
+                solutionURL = selectedProblemData[2];
+                // Load the problem and solution images
+                document.getElementById("problem-image").src  = problemURL;
+                document.getElementById("solution-image").src = solutionURL;
+            };
+
+            // Tutor's button click to send the selected problem to the peer tutee
+            document.querySelector('#tutor-problem-send').onclick = function(e) {
+                // Send the current problem to the peer
+                tutorSendProblem();
+            };
+
+            // Tutor's button click to complete review of the current problem/solution/answer
+            // set and proceed to being able to pick the next problem
+            document.querySelector('#tutor-complete-review').onclick = function(e) {
+                // Handle this process
+                tutorCompleteReview();
+            };
+
+
+            // Tutee's button click to send answer to a problem to the tutor
+            document.querySelector('#tutee-answer-send').onclick = function(e) {
+                // Synchronous AJAX call to record this answer and send to peer
+                tuteeSendAnswer();
+            };
+
+            // Tutee's button click to request a new problem since they're stuck on one
+            document.querySelector('#tutee-answer-request-new').onclick = function(e) {
+                // Handle request to peer
+                tuteeRequestNewProblem();
+            };
+
+
+            // **********************
+            // Answer Canvas Interaction Functions
+            // **********************
+
+            // Global canvases and contexts
+            var answerCanvas;
+            var answerCTX;
+
+            // Pre-configured canvas dimensions, styling, and colors
+            var canvasWidth = 500;
+            var canvasHeight = 300;
+            var radius = 5;
+            var canvasStart = 0;
+            var canvasEnd = Math.PI * 2;
+            var dragging = false;
+            var lineWidth = radius * 2;
+            var answerColor = "#0028BB ";
+
+            // Initialize Problem and Solution canvas elements and add events
+            function initCanvas() {
+
+                // Get the Answer canvas and 2D context
+                answerCanvas = document.getElementById('answerCanvas');
+                answerCTX    = answerCanvas.getContext("2d");
+
+                // Adjust dimensions
+                answerCanvas.width = canvasWidth;
+                answerCanvas.height = canvasHeight;
+
+                // Set up colors and styles
+                answerCTX.lineWidth = lineWidth;
+                answerCTX.lineJoin = 'round';
+                answerCTX.lineCap = 'round';
+                answerCTX.strokeStyle = answerColor;
+                answerCTX.fillStyle = answerColor;
+
+                // Answer listeners
+                var putPoint = function(e) {
+                    if(dragging) {
+                        answerCTX.lineTo(e.offsetX, e.offsetY);
+                        answerCTX.stroke();
+                        answerCTX.beginPath();
+                        answerCTX.arc(e.offsetX, e.offsetY, radius, canvasStart, canvasEnd);
+                        answerCTX.fill();
+                        answerCTX.beginPath();
+                        answerCTX.moveTo(e.offsetX, e.offsetY);
+                    }
+                }
+                var engage = function(e){
+                    dragging = true;
+                    putPoint(e);
+                }
+                var disengage = function(){
+                    dragging = false;
+                    answerCTX.beginPath();
+                }
+                answerCanvas.addEventListener('mousedown', engage);
+                answerCanvas.addEventListener('mousemove', putPoint);
+                answerCanvas.addEventListener('mouseup', disengage);
+            }
+
+            // Initialize canvas just once. It will be cleared elsewhere
+            initCanvas();
+
+        </script>
+        
+    </div>
+{% endblock %}

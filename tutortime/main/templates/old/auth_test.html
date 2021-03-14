@@ -1,0 +1,9 @@
+{% csrf_token %}
+User Logged in:
+{% if user.is_authenticated %}
+    True
+{%else%}
+    False
+{%endif%}
+<br>
+User Logged in As: {{user.username}}

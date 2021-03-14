@@ -1,0 +1,220 @@
+{% extends 'baseedu.html' %}
+
+{% block content %}
+    {% load static %}
+
+    <!-- Script for handling tutoring problem and solution canvases -->
+    <script>
+        // Global canvases and contexts
+        var problemCanvas;
+        var solutionCanvas;
+        var problemCTX;
+        var solutionCTX;
+
+        // Pre-configured canvas dimensions, styling, and colors
+        var canvasWidth = 500;
+        var canvasHeight = 300;
+        var radius = 5;
+        var start = 0;
+        var end = Math.PI * 2;
+        var dragging = false;
+        var lineWidth = radius * 2;
+        var problemColor = "#00CC99";
+        var solutionColor = "#cb3594";
+
+        // Data recording entries
+        var canvasDataProblem;
+        var canvasDataSolution;
+
+        // Helper function to record text version of canvas data
+        function recordCanvasData() {
+            canvasDataProblem = document.getElementById('canvasDataProblem');
+            canvasDataSolution = document.getElementById('canvasDataSolution');
+            canvasDataProblem.value = document.getElementById('problemCanvas').toDataURL();
+            canvasDataSolution.value = document.getElementById('solutionCanvas').toDataURL();
+        }
+
+        // Initialize Problem and Solution canvas elements and add events
+        function initProblemSolutionCanvases() {
+
+            // Get the Problem and Solution canvas elements and 2D contexts
+            problemCanvas  = document.getElementById('problemCanvas');
+            problemCTX     = problemCanvas.getContext("2d");
+            solutionCanvas = document.getElementById('solutionCanvas');
+            solutionCTX    = solutionCanvas.getContext("2d");
+
+            // Adjust dimensions
+            problemCanvas.width = canvasWidth;
+            solutionCanvas.width = canvasWidth;
+            problemCanvas.height = canvasHeight;
+            solutionCanvas.height = canvasHeight;
+
+            // Set up colors and styles
+            problemCTX.lineWidth = lineWidth;
+            problemCTX.lineJoin = 'round';
+            problemCTX.lineCap = 'round';
+            problemCTX.strokeStyle = problemColor;
+            problemCTX.fillStyle = problemColor;
+            solutionCTX.lineWidth = lineWidth;
+            solutionCTX.lineJoin = 'round';
+            solutionCTX.lineCap = 'round';
+            solutionCTX.strokeStyle = solutionColor;
+            solutionCTX.fillStyle = solutionColor;
+
+            // Fill in initial data into the data fields
+            recordCanvasData();
+
+            // Problem listeners
+            var putPointProblem = function(e) {
+                if(dragging) {
+                    problemCTX.lineTo(e.offsetX, e.offsetY);
+                    problemCTX.stroke();
+                    problemCTX.beginPath();
+                    problemCTX.arc(e.offsetX, e.offsetY, radius, start, end);
+                    problemCTX.fill();
+                    problemCTX.beginPath();
+                    problemCTX.moveTo(e.offsetX, e.offsetY);
+                }
+            }
+            var engageProblem = function(e){
+                dragging = true;
+                putPointProblem(e);
+            }
+            var disengageProblem = function(){
+                dragging = false;
+                problemCTX.beginPath();
+                recordCanvasData();
+            }
+            problemCanvas.addEventListener('mousedown', engageProblem);
+            problemCanvas.addEventListener('mousemove', putPointProblem);
+            problemCanvas.addEventListener('mouseup', disengageProblem);
+
+            // Solution listeners
+            var putPointSolution = function(e) {
+                if(dragging) {
+                    solutionCTX.lineTo(e.offsetX, e.offsetY);
+                    solutionCTX.stroke();
+                    solutionCTX.beginPath();
+                    solutionCTX.arc(e.offsetX, e.offsetY, radius, start, end);
+                    solutionCTX.fill();
+                    solutionCTX.beginPath();
+                    solutionCTX.moveTo(e.offsetX, e.offsetY);
+                }
+            }
+            var engageSolution = function(e){
+                dragging = true;
+                putPointSolution(e);
+            }
+            var disengageSolution = function(){
+                dragging = false;
+                solutionCTX.beginPath();
+                recordCanvasData();
+            }
+            // Mouse input
+            solutionCanvas.addEventListener('mousedown', engageSolution);
+            solutionCanvas.addEventListener('mousemove', putPointSolution);
+            solutionCanvas.addEventListener('mouseup', disengageSolution);
+            // Touch input
+            
+        }
+    </script>
+
+    <!-- Container - TutorProblem -->
+    <div id="problem" class="container">
+
+        <!-- Login and Logo -->
+        <div class="row text-center">
+            <div class="col-xs-12">
+                {% if user.is_authenticated %}
+                <p><b><a href="/user/{{user.id}}">{{user.first_name}} {{user.last_name}} ({{user.username}})</a> | <a href="/logout/">Logout</a></b></p>
+                {% else %}
+                <p><b><a href="/login/">Login</a> | <a href="/signup/">Register</a></b></p>
+                {% endif %}
+                <h3><a href="/edu"><img src="{% static 'main/Edu.png'%}" class="img-responsive center-block"></a></h3>
+            </div>
+        </div>
+        <div class="row text-center">
+            <div class="col-xs-12">
+                <p class="bg-danger"><b>{{error_message}}</b></p>
+            </div>
+        </div>
+
+        <!-- Check for whether to present editing form -->
+        {% if problem_id == "new" or creating_student == True or editing_admin == True or editing_teacher == True %}
+            <!-- Present the editing form -->
+            <div class="row text-center">
+                <div class="col-xs-12">
+                    {% if creating_student == True %}
+                        <h3>Create New Tutor Problem</h3>
+                    {% elif editing_admin == True %}
+                        <h3>Assign Tutor Problem</h3>
+                    {% elif editing_teacher == True %}
+                        <h3>Assess Tutor Problem</h3>
+                    {% endif %}
+                    <br>
+                </div>
+            </div>
+            <form action="/edu/problem/{{problem_id}}" method="post">
+                {% csrf_token %}
+                {% for field in form %}
+                    <div class="row">
+                        <div class="col-xs-6 text-right"><b>{{field.label_tag}}</b></b></div><div class="col-xs-6 text-left">{{field}}</div>
+                    </div>
+                {% endfor %}
+                <br>
+                {% if creating_student == True %}
+                    <!-- If creating student, present two canvases for drawing and provide mechanism for capturing saved data -->
+                    <input type="hidden" id="canvasDataProblem" name="canvasDataProblem"/>
+                    <input type="hidden" id="canvasDataSolution" name="canvasDataSolution"/>
+                    <div class="row"><div class="col-xs-6 text-right"><b>Problem</b></div><div class="col-xs-6 text-left"><b>Solution</b></div></div>
+                    <div class="row"><div class="col-xs-6 text-right panel panel-default"><canvas id="problemCanvas"></canvas></div><div class="col-xs-6 text-left panel panel-default"><canvas id="solutionCanvas"></canvas></div></div>
+                    <script>initProblemSolutionCanvases();</script>
+                    <!-- <div class="row"><div class="col-xs-12 text-center"><input type="button" value="Record Images" onclick='recordProblemSolutionCanvasData();'></div></div> -->
+                    <br>
+                {% else %}
+                    <!-- Fetch and display problem and solution images -->
+                    <div class="row"><div class="col-xs-6 text-left"><b>Problem</b></div><div class="col-xs-6 text-left"><b>Solution</b></div></div>
+                    <div class="row"><div class="col-xs-6 text-right panel panel-default"><img src="{{problem_url}}" class="img-responsive center-block" /></div><div class="col-xs-6 text-left panel panel-default"><img src="{{solution_url}}" class="img-responsive center-block" /></div></div>
+                {% endif %}
+                <div class="row"><div class="col-xs-12 text-center"><input type="submit" value="Save" /></div></div>
+            </form>
+        {% else %}
+
+            <!-- Otherwise, display current information -->
+            <div class="row text-center">
+                <div class="col-xs-12">
+                    <a href="/edu/allproblems" style="color:black"><h3>Tutor Problems</h3></a>
+                    <h2>Tutor Problem ID={{problem_id}}</h2>
+                </div>
+            </div>
+
+            <!-- Fetch and display problem and solution images -->
+            <div class="row"><div class="col-xs-6 text-right"><b>Problem</b></div><div class="col-xs-6 text-left"><b>Solution</b></div></div>
+            <div class="row"><div class="col-xs-6 text-right panel panel-default"><img src="{{problem_url}}" class="img-responsive center-block" /></div><div class="col-xs-6 text-left panel panel-default"><img src="{{solution_url}}" class="img-responsive center-block" /></div></div>
+
+            <div class="row"><div class="col-xs-6 text-right"><b>Creator:</b></div><div class="col-xs-6 text-left">{{cur_problem.creator}}</div></div>
+            <div class="row"><div class="col-xs-6 text-right"><b>Approver:</b></div><div class="col-xs-6 text-left">{{cur_problem.approver}}</div></div>
+            {% if cur_problem.assessed == True %}
+                <div class="row"><div class="col-xs-6 text-right"><b>Approved?:</b></div><div class="col-xs-6 text-left">{{cur_problem.approved}}</div></div>
+                <div class="row"><div class="col-xs-6 text-right"><b>Grade Level:</b></div><div class="col-xs-6 text-left">{{cur_problem.grade}}</div></div>
+                <div class="row"><div class="col-xs-6 text-right"><b>Comments:</b></div><div class="col-xs-6 text-left">{{cur_problem.comments}}</div></div>
+            {% else %}
+                <div class="row"><div class="col-xs-6 text-right"><b>Approved?:</b></div><div class="col-xs-6 text-left">Not yet assessed</div></div>
+            {% endif %}
+            <div class="row"><div class="col-xs-6 text-right"><b>BC Address:</b></div><div class="col-xs-6 text-left">{{cur_problem.address}}</div></div>
+
+            <!--Only display an Edit button if this is an administrator or assigned educator -->
+            {% if admin and cur_problem.assigned == False %}
+                <br>
+                <form action="/edu/problem/{{problem_id}}/edit">
+                <div class="row"><div class="col-xs-12 text-center"><input type="submit" value="Assign Problem"/></div></div>
+                </form>
+            {% elif is_assigned_educator and cur_problem.assessed == False %}
+                <br>
+                <form action="/edu/problem/{{problem_id}}/edit">
+                <div class="row"><div class="col-xs-12 text-center"><input type="submit" value="Assess Problem"/></div></div>
+                </form>
+            {% endif %}
+        {% endif %}
+    </div>
+{% endblock %}

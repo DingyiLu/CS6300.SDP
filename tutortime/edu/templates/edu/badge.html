@@ -1,0 +1,68 @@
+{% extends 'baseedu.html' %}
+
+{% block content %}
+    {% load static %}
+    <!-- Container - Badge -->
+    <div id="badge" class="container">
+
+        <!-- Login and Logo -->
+        <div class="row text-center">
+            <div class="col-xs-12">
+                {% if user.is_authenticated %}
+                <p><b><a href="/user/{{user.id}}">{{user.first_name}} {{user.last_name}} ({{user.username}})</a> | <a href="/logout/">Logout</a></b></p>
+                {% else %}
+                <p><b><a href="/login/">Login</a> | <a href="/signup/">Register</a></b></p>
+                {% endif %}
+                <h3><a href="/edu"><img src="{% static 'main/Edu.png'%}" class="img-responsive center-block"></a></h3>
+            </div>
+        </div>
+        <div class="row text-center">
+            <div class="col-xs-12">
+                <p class="bg-danger"><b>{{error_message}}</b></p>
+            </div>
+        </div>
+
+        <!-- Check for whether to present editing form -->
+        {% if editing == True %}
+            <!-- Only proceed if this is a teacher -->
+            {% if teacher %}
+                <!-- Present the editing form -->
+                <div class="row text-center">
+                    <div class="col-xs-12">
+                        <h3>Award Digital Badge</h3>
+                        <br>
+                    </div>
+                </div>
+                {% if student_id %}
+                <div class="col-xs-6 text-right"><b>Recipient:</b></b></div><div class="col-xs-6 text-left">{{student.first_name}} {{student.last_name}}</div>
+                <form action="/edu/badge/new/{{teacher_id}}/{{student_id}}" method="post">
+                {% else %}
+                <form action="/edu/badge/new/{{teacher_id}}" method="post">
+                {% endif %}
+                    {% csrf_token %}
+                    {% for field in form %}
+                        <div class="row">
+                            <div class="col-xs-6 text-right"><b>{{field.label_tag}}</b></b></div><div class="col-xs-6 text-left">{{field}}</div>
+                        </div>
+                    {% endfor %}
+                    <br>
+                    <div class="row"><div class="col-xs-12 text-center"><input type="submit" value="Save" /></div></div>
+                </form>
+            {% endif %}
+        {% else %}
+
+            <!-- Otherwise, display current information -->
+            <div class="row text-center">
+                <div class="col-xs-12">
+                    <a href="/edu/allbadges" style="color:black"><h3>Digital Badges</h3></a>
+                    <h2>{{cur_badge.title}}</h2>
+                </div>
+            </div>
+            <div class="row"><div class="col-xs-6 text-right"><b>Awarded to Student:</b></div><div class="col-xs-6 text-left">{{cur_badge.student}}</div></div>
+            <div class="row"><div class="col-xs-6 text-right"><b>Awarded by Teacher:</b></div><div class="col-xs-6 text-left">{{cur_badge.teacher}}</div></div>
+            <div class="row"><div class="col-xs-6 text-right"><b>Awarded:</b></div><div class="col-xs-6 text-left">{{cur_badge.date_created}}</div></div>
+            <div class="row"><div class="col-xs-6 text-right"><b>Description:</b></div><div class="col-xs-6 text-left">{% if cur_badge.info %}{{cur_badge.info}}{% endif %}</div></div>
+
+        {% endif %}
+    </div>
+{% endblock %}

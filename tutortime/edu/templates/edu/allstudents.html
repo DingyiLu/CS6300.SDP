@@ -1,0 +1,65 @@
+{% extends 'baseedu.html' %}
+
+{% block content %}
+    {% load static %}
+    <!-- Container - All Students -->
+    <div id="allstudents" class="container">
+
+        <!-- Login and Logo -->
+        <div class="row text-center">
+            <div class="col-xs-12">
+                {% if user.is_authenticated %}
+                <p><b><a href="/user/{{user.id}}">{{user.first_name}} {{user.last_name}} ({{user.username}})</a> | <a href="/logout/">Logout</a></b></p>
+                {% else %}
+                <p><b><a href="/login/">Login</a> | <a href="/signup/">Register</a></b></p>
+                {% endif %}
+                <h3><a href="/edu"><img src="{% static 'main/Edu.png'%}" class="img-responsive center-block"></a></h3>
+            </div>
+        </div>
+        <div class="row text-center">
+            <div class="col-xs-12">
+                <p class="bg-danger"><b>{{error_message}}</b></p>
+            </div>
+        </div>
+
+        <!-- All Students -->
+        <div class="row text-center">
+            <div class="col-xs-12">
+               <h3>All Students</h3>
+               <table class="table text-center">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Grade</th>
+                    <th>Email</th>
+                    <th>Badges</th>
+                  </tr>
+                </thead>
+                <tbody>
+                {% for student in all_students %}
+                  <tr>
+                    <td><a href="/edu/student/{{student.id}}" class="text-center" style="color:black"><b>{{student.first_name}} {{student.last_name}}</b></a></td>
+                    <td>{{student.grade}}</td>
+                    <td>{{student.email}}</td>
+                    <td>
+                        {% for badge in student.badges.all %}
+                            <a href="/edu/badge/{{badge.id}}"><b>B </b></a>
+                        {% endfor %}
+                    </td>
+                  </tr>
+                {% endfor %}
+                </tbody>
+              </table>
+            </div>
+        </div>
+
+        <!--Only display an Edit button if this is an administrator -->
+        {% if admin %}
+            <br>
+            <form action="/edu/student/create">
+                <div class="row"><div class="col-xs-12 text-center"><input type="submit" value="Register a New Student"/></div></div>
+            </form>
+        {% endif %}
+
+    </div>
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends 'baseedu.html' %}
+
+{% block content %}
+    {% load static %}
+    <!-- Container - User Signup -->
+    <div id="sign-up" class="container">
+
+        <!-- Login and Logo -->
+        <div class="row text-center">
+            <div class="col-xs-12">
+                {% if user.is_authenticated %}
+                <p><b><a href="/user/{{user.id}}">{{user.first_name}} {{user.last_name}} ({{user.username}})</a> | <a href="/logout/">Logout</a></b></p>
+                {% else %}
+                <p><b><a href="/login/">Login</a> | <a href="/signup/">Register</a></b></p>
+                {% endif %}
+                <h3><a href="/edu"><img src="{% static 'main/Edu.png'%}" class="img-responsive center-block"></a></h3>
+            </div>
+        </div>
+        <div class="row text-center">
+            <div class="col-xs-12">
+                <p class="bg-danger"><b>{{error_message}}</b></p>
+            </div>
+        </div>
+
+        <form method="post" enctype="multipart/form-data">
+         {% csrf_token %}
+         {% for field in form %}
+             <div class="row text-center">
+                 <div class="col-xs-6 text-right"><b>{{ field.label_tag }}</b></div><div class="col-xs-6 text-left">{{ field }}</div>
+             </div>
+             <div class="col-xs-12">
+                 {% for error in field.errors %}
+                     <p style="color: red">{{ error }}</p>
+                 {% endfor %}
+             </div>
+         {% endfor %}
+         {% for field in pform %}
+             <div class="row text-center">
+                 <div class="col-xs-6 text-right"><b>{% if field.name == 'phone_number' %}Phone Number (Optional):{% else %}{{ field.label_tag }}{% endif %}</b></div><div class="col-xs-6 text-left">{{ field }}</div>
+             </div>
+         {% endfor %}
+         <div class="row text-center">
+             <div class="col-xs-12">
+                 <br>
+                 <button type="submit">Sign Up</button>
+             </div>
+         </div>
+        </form>
+    </div>
+{% endblock %}

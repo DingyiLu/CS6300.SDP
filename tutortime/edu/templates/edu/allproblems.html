@@ -1,0 +1,129 @@
+{% extends 'baseedu.html' %}
+
+{% block content %}
+    {% load static %}
+    <!-- Container - All Tutor Problems -->
+    <div id="allproblems" class="container">
+
+        <!-- Login and Logo -->
+        <div class="row text-center">
+            <div class="col-xs-12">
+                {% if user.is_authenticated %}
+                <p><b><a href="/user/{{user.id}}">{{user.first_name}} {{user.last_name}} ({{user.username}})</a> | <a href="/logout/">Logout</a></b></p>
+                {% else %}
+                <p><b><a href="/login/">Login</a> | <a href="/signup/">Register</a></b></p>
+                {% endif %}
+                <h3><a href="/edu"><img src="{% static 'main/Edu.png'%}" class="img-responsive center-block"></a></h3>
+            </div>
+        </div>
+        <div class="row text-center">
+            <div class="col-xs-12">
+                <p class="bg-danger"><b>{{error_message}}</b></p>
+            </div>
+        </div>
+
+        <!--Only students can create problems -->
+        {% if student %}
+            <br>
+            <form action="/edu/problem/create">
+                <div class="row"><div class="col-xs-12 text-center"><input type="submit" value="Create a New Problem"/></div></div>
+            </form>
+        {% endif %}
+
+        <!-- Approved Tutor Problems -->
+        <div class="row text-center">
+            <div class="col-xs-12">
+               <h3>Approved Tutor Problems</h3>
+               <table class="table text-center">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Grade</th>
+                    <th>Created On</th>
+                    <th>Created By</th>
+                    <th>Assessed By</th>
+                    {% if student %}
+                        <th></th>
+                    {% endif %}
+                  </tr>
+                </thead>
+                <tbody>
+                {% for problem in approved_problems %}
+                  <tr>
+                    <td><a href="/edu/problem/{{problem.id}}" class="text-center" style="color:black"><b>{{problem.id}}</b></a></td>
+                    <td>{{problem.grade}}</td>
+                    <td>{{problem.date_created}}</td>
+                    <td>{{problem.creator.first_name}} {{problem.creator.last_name}}</td>
+                    <td>{{problem.approver.first_name}} {{problem.approver.last_name}}</td>
+                    {% if student %}
+                        <td>
+                            <form action="/edu/answer/create/{{problem.id}}">
+                            <div class="row"><div class="col-xs-12 text-center"><input type="submit" value="Answer"/></div></div>
+                            </form>
+                        </td>
+                    {% endif %}
+                  </tr>
+                {% endfor %}
+                </tbody>
+              </table>
+            </div>
+        </div>
+
+        <!-- Assigned Tutor Problems -->
+        <div class="row text-center">
+            <div class="col-xs-12">
+               <h3>Assigned Tutor Problems</h3>
+               <table class="table text-center">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Grade</th>
+                    <th>Created On</th>
+                    <th>Created By</th>
+                    <th>Assigned To</th>
+                  </tr>
+                </thead>
+                <tbody>
+                {% for problem in assigned_problems %}
+                  <tr>
+                    <td><a href="/edu/problem/{{problem.id}}" class="text-center" style="color:black"><b>{{problem.id}}</b></a></td>
+                    <td>{{problem.grade}}</td>
+                    <td>{{problem.date_created}}</td>
+                    <td>{{problem.creator.first_name}} {{problem.creator.last_name}}</td>
+                    <td>{{problem.approver.first_name}} {{problem.approver.last_name}}</td>
+                  </tr>
+                {% endfor %}
+                </tbody>
+              </table>
+            </div>
+        </div>
+
+        <!-- Unassigned Tutor Problems -->
+        <div class="row text-center">
+            <div class="col-xs-12">
+               <h3>Unassigned Tutor Problems</h3>
+               <table class="table text-center">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Grade</th>
+                    <th>Created On</th>
+                    <th>Created By</th>
+                  </tr>
+                </thead>
+                <tbody>
+                {% for problem in unassigned_problems %}
+                  <tr>
+                    <td><a href="/edu/problem/{{problem.id}}" class="text-center" style="color:black"><b>{{problem.id}}</b></a></td>
+                    <td>{{problem.grade}}</td>
+                    <td>{{problem.date_created}}</td>
+                    <td>{{problem.creator.first_name}} {{problem.creator.last_name}}</td>
+                  </tr>
+                {% endfor %}
+                </tbody>
+              </table>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}

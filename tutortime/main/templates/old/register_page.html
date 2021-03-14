@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+{# Load the tag library #}
+{% load bootstrap3 %}
+
+{# Display django.contrib.messages as Bootstrap alerts #}
+{% bootstrap_messages %}
+{% load static %}
+<html lang="en">
+
+<head>
+    <title>InnitLife.com</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="{% static 'main.css' %}">
+    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet" type="text/css">
+    <link href="{% static 'main.css'%}" rel="stylesheet" type ="text/css" >
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+    
+</head>
+
+<body id="register" data-spy="scroll" data-target=".navbar" data-offset="50">
+
+    <!-- Top bar navigation -->
+	{% include 'nav_bar.html' %}
+
+<div class="container">
+    <div id="register">
+        <table border=1>
+            Registration
+
+            <form id="register" method="post" action="auth/register/">
+                {{ forms.as_table }}{% csrf_token %}
+            <td>figure out how to make this table look good</td>
+                <td><input  id='submit_button'  type="submit" value="Register">
+            </form>
+        </table>
+    </div>
+</div>
+    
+    
+    <!-- Container (Contact Section) -->
+    {% include 'contact.html' %}
+
+    <!-- Container (Footer Section) -->
+    {% include 'footer.html' %}
+
+</body>
+
+</html>
+

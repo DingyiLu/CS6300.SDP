@@ -1,0 +1,30 @@
+package edu.gatech.seclass;
+
+import static org.junit.Assert.*;
+
+import org.junit.Test;
+
+public class TestCoverageClassTestSC1 {
+
+    private TestCoverageClass tcc;
+
+    /*
+     *   TEST CASES
+     *
+     *   Goal: Achieve less than 100% statement coverage while exposing the fault.
+     */
+
+    // Purpose:
+    @Test
+    public void testCoverageClassTestSC1Test1()  {
+
+        int a = 10;
+        int b = 10;
+        double r = 0.5;
+
+        tcc = new TestCoverageClass();
+        double result = tcc.testCoverageMethod1(a, b);
+        assertEquals("Unexpected calculation result!", r, result, 0.0);
+    }
+
+}

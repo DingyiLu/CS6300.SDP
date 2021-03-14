@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% load static %}
+    <!-- Container - Set Password -->
+    <div id="check-facebook" class="container">
+        <div class="row text-center">
+            <div class="col-xs-12">
+                <h3><a href="/"><img src="{% static 'main/Innit.png'%}" class="img-responsive center-block"></a></h3>
+                <h2>Link Existing Account?</h2>
+                <p>We found the following <strong>existing</strong> user with the same name or email. Check the box if you would like to <strong>link</strong> this account and be able to sign in with Facebook.</p>
+                <p><font color="green"><strong>{{other_user.first_name}} {{other_user.last_name}} ({{other_user.email}})</strong></font></p>
+                <form method="post" action="/mergefb/{{current_user.id}}/{{other_user.id}}">
+                    {% csrf_token %}
+                    {% for field in form %}
+                        <div class="row text-center">
+                            <div class="col-xs-6 text-right"><b>{{ field.label_tag }}</b></div><div class="col-xs-6 text-left">{{ field }}</div>
+                        </div>
+                    {% endfor %}
+                    <br>
+                    <button type="submit">Save</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

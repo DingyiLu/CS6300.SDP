@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+{# Load the tag library #}
+{% load bootstrap3 %}
+
+{# Display django.contrib.messages as Bootstrap alerts #}
+{% bootstrap_messages %}
+{% load static %}
+<html lang="en">
+
+<head>
+    <title>OnlineTutorTime.com</title>
+    <link rel="shortcut icon" type="image/png" href="{% static 'main/faviconedu.ico'%}"/>
+    
+    <!-- Character set and viewport -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Stylesheet -->
+    <link href="{% static 'main/maininnit1.css'%}" rel="stylesheet" type ="text/css" >
+    <!-- <link rel="stylesheet" href="{% static 'main/main.css' %}"> -->
+    
+    <!-- External scripts -->
+    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet" type="text/css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    
+    <!-- Canvas drawing scripting -->
+    <style type="text/css">
+        canvas { border: 1px solid black; }
+    </style>
+    
+    
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+</head>
+
+<body id="the_body" data-spy="scroll" data-target=".navbar" data-offset="50">
+    
+    <!-- To be filled out by extending template -->
+    {% block content %}
+    {% endblock %}
+
+    <!-- Container (Contact Section) -->
+    {% include 'contactedu.html' %}
+
+    <!-- Container (Footer Section) -->
+    {% include 'footer.html' %}
+    
+</body>
+
+</html>

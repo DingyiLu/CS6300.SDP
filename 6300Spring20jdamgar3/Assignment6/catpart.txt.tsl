@@ -1,0 +1,744 @@
+
+Test Case 1  		<single>
+   File Length :  0
+
+
+Test Case 2  		<single>
+   File Length :  maxstring
+
+
+Test Case 3  		<single>  (follows [if])
+   File Content :  special characters
+
+
+Test Case 4  		<single>  (follows [if])
+   File Content :  whitespace characters
+
+
+Test Case 5  		<single>  (follows [if])
+   Delimiter Length :  maxstring
+
+
+Test Case 6  		<single>  (follows [if])
+   Remove or Keep :  No Change
+
+
+Test Case 7  		<error>  (follows [if])
+   Remove or Keep Length :  0
+
+
+Test Case 8  		<single>  (follows [if])
+   Remove or Keep Length :  maxstring
+
+
+Test Case 9  		<error>  (follows [if])
+   Remove or Keep Content :  special characters
+
+
+Test Case 10 		<error>  (follows [if])
+   Remove or Keep Content :  whitespace characters
+
+
+Test Case 11 		(Key = 2.1.1.0.1.2.1.1.)
+   File Length            :  10
+   File Content           :  all characters
+   Delimiter Length       :  0
+   Delimiter Content      :  <n/a>
+   Remove or Keep         :  Remove
+   Remove or Keep Length  :  5
+   Remove or Keep Content :  alphanumeric characters
+   Reverse Capitalization :  True
+
+
+Test Case 12 		(Key = 2.1.1.0.1.2.1.2.)
+   File Length            :  10
+   File Content           :  all characters
+   Delimiter Length       :  0
+   Delimiter Content      :  <n/a>
+   Remove or Keep         :  Remove
+   Remove or Keep Length  :  5
+   Remove or Keep Content :  alphanumeric characters
+   Reverse Capitalization :  False
+
+
+Test Case 13 		(Key = 2.1.1.0.2.2.1.1.)
+   File Length            :  10
+   File Content           :  all characters
+   Delimiter Length       :  0
+   Delimiter Content      :  <n/a>
+   Remove or Keep         :  Keep
+   Remove or Keep Length  :  5
+   Remove or Keep Content :  alphanumeric characters
+   Reverse Capitalization :  True
+
+
+Test Case 14 		(Key = 2.1.1.0.2.2.1.2.)
+   File Length            :  10
+   File Content           :  all characters
+   Delimiter Length       :  0
+   Delimiter Content      :  <n/a>
+   Remove or Keep         :  Keep
+   Remove or Keep Length  :  5
+   Remove or Keep Content :  alphanumeric characters
+   Reverse Capitalization :  False
+
+
+Test Case 15 		(Key = 2.1.2.1.1.2.1.1.)
+   File Length            :  10
+   File Content           :  all characters
+   Delimiter Length       :  5
+   Delimiter Content      :  alphanumeric characters
+   Remove or Keep         :  Remove
+   Remove or Keep Length  :  5
+   Remove or Keep Content :  alphanumeric characters
+   Reverse Capitalization :  True
+
+
+Test Case 16 		(Key = 2.1.2.1.1.2.1.2.)
+   File Length            :  10
+   File Content           :  all characters
+   Delimiter Length       :  5
+   Delimiter Content      :  alphanumeric characters
+   Remove or Keep         :  Remove
+   Remove or Keep Length  :  5
+   Remove or Keep Content :  alphanumeric characters
+   Reverse Capitalization :  False
+
+
+Test Case 17 		(Key = 2.1.2.1.2.2.1.1.)
+   File Length            :  10
+   File Content           :  all characters
+   Delimiter Length       :  5
+   Delimiter Content      :  alphanumeric characters
+   Remove or Keep         :  Keep
+   Remove or Keep Length  :  5
+   Remove or Keep Content :  alphanumeric characters
+   Reverse Capitalization :  True
+
+
+Test Case 18 		(Key = 2.1.2.1.2.2.1.2.)
+   File Length            :  10
+   File Content           :  all characters
+   Delimiter Length       :  5
+   Delimiter Content      :  alphanumeric characters
+   Remove or Keep         :  Keep
+   Remove or Keep Length  :  5
+   Remove or Keep Content :  alphanumeric characters
+   Reverse Capitalization :  False
+
+
+Test Case 19 		(Key = 2.1.2.2.1.2.1.1.)
+   File Length            :  10
+   File Content           :  all characters
+   Delimiter Length       :  5
+   Delimiter Content      :  special characters
+   Remove or Keep         :  Remove
+   Remove or Keep Length  :  5
+   Remove or Keep Content :  alphanumeric characters
+   Reverse Capitalization :  True
+
+
+Test Case 20 		(Key = 2.1.2.2.1.2.1.2.)
+   File Length            :  10
+   File Content           :  all characters
+   Delimiter Length       :  5
+   Delimiter Content      :  special characters
+   Remove or Keep         :  Remove
+   Remove or Keep Length  :  5
+   Remove or Keep Content :  alphanumeric characters
+   Reverse Capitalization :  False
+
+
+Test Case 21 		(Key = 2.1.2.2.2.2.1.1.)
+   File Length            :  10
+   File Content           :  all characters
+   Delimiter Length       :  5
+   Delimiter Content      :  special characters
+   Remove or Keep         :  Keep
+   Remove or Keep Length  :  5
+   Remove or Keep Content :  alphanumeric characters
+   Reverse Capitalization :  True
+
+
+Test Case 22 		(Key = 2.1.2.2.2.2.1.2.)
+   File Length            :  10
+   File Content           :  all characters
+   Delimiter Length       :  5
+   Delimiter Content      :  special characters
+   Remove or Keep         :  Keep
+   Remove or Keep Length  :  5
+   Remove or Keep Content :  alphanumeric characters
+   Reverse Capitalization :  False
+
+
+Test Case 23 		(Key = 2.1.2.3.1.2.1.1.)
+   File Length            :  10
+   File Content           :  all characters
+   Delimiter Length       :  5
+   Delimiter Content      :  whitespace characters
+   Remove or Keep         :  Remove
+   Remove or Keep Length  :  5
+   Remove or Keep Content :  alphanumeric characters
+   Reverse Capitalization :  True
+
+
+Test Case 24 		(Key = 2.1.2.3.1.2.1.2.)
+   File Length            :  10
+   File Content           :  all characters
+   Delimiter Length       :  5
+   Delimiter Content      :  whitespace characters
+   Remove or Keep         :  Remove
+   Remove or Keep Length  :  5
+   Remove or Keep Content :  alphanumeric characters
+   Reverse Capitalization :  False
+
+
+Test Case 25 		(Key = 2.1.2.3.2.2.1.1.)
+   File Length            :  10
+   File Content           :  all characters
+   Delimiter Length       :  5
+   Delimiter Content      :  whitespace characters
+   Remove or Keep         :  Keep
+   Remove or Keep Length  :  5
+   Remove or Keep Content :  alphanumeric characters
+   Reverse Capitalization :  True
+
+
+Test Case 26 		(Key = 2.1.2.3.2.2.1.2.)
+   File Length            :  10
+   File Content           :  all characters
+   Delimiter Length       :  5
+   Delimiter Content      :  whitespace characters
+   Remove or Keep         :  Keep
+   Remove or Keep Length  :  5
+   Remove or Keep Content :  alphanumeric characters
+   Reverse Capitalization :  False
+
+
+Test Case 27 		(Key = 2.2.1.0.1.2.1.1.)
+   File Length            :  10
+   File Content           :  alphanumeric characters
+   Delimiter Length       :  0
+   Delimiter Content      :  <n/a>
+   Remove or Keep         :  Remove
+   Remove or Keep Length  :  5
+   Remove or Keep Content :  alphanumeric characters
+   Reverse Capitalization :  True
+
+
+Test Case 28 		(Key = 2.2.1.0.1.2.1.2.)
+   File Length            :  10
+   File Content           :  alphanumeric characters
+   Delimiter Length       :  0
+   Delimiter Content      :  <n/a>
+   Remove or Keep         :  Remove
+   Remove or Keep Length  :  5
+   Remove or Keep Content :  alphanumeric characters
+   Reverse Capitalization :  False
+
+
+Test Case 29 		(Key = 2.2.1.0.2.2.1.1.)
+   File Length            :  10
+   File Content           :  alphanumeric characters
+   Delimiter Length       :  0
+   Delimiter Content      :  <n/a>
+   Remove or Keep         :  Keep
+   Remove or Keep Length  :  5
+   Remove or Keep Content :  alphanumeric characters
+   Reverse Capitalization :  True
+
+
+Test Case 30 		(Key = 2.2.1.0.2.2.1.2.)
+   File Length            :  10
+   File Content           :  alphanumeric characters
+   Delimiter Length       :  0
+   Delimiter Content      :  <n/a>
+   Remove or Keep         :  Keep
+   Remove or Keep Length  :  5
+   Remove or Keep Content :  alphanumeric characters
+   Reverse Capitalization :  False
+
+
+Test Case 31 		(Key = 2.2.2.1.1.2.1.1.)
+   File Length            :  10
+   File Content           :  alphanumeric characters
+   Delimiter Length       :  5
+   Delimiter Content      :  alphanumeric characters
+   Remove or Keep         :  Remove
+   Remove or Keep Length  :  5
+   Remove or Keep Content :  alphanumeric characters
+   Reverse Capitalization :  True
+
+
+Test Case 32 		(Key = 2.2.2.1.1.2.1.2.)
+   File Length            :  10
+   File Content           :  alphanumeric characters
+   Delimiter Length       :  5
+   Delimiter Content      :  alphanumeric characters
+   Remove or Keep         :  Remove
+   Remove or Keep Length  :  5
+   Remove or Keep Content :  alphanumeric characters
+   Reverse Capitalization :  False
+
+
+Test Case 33 		(Key = 2.2.2.1.2.2.1.1.)
+   File Length            :  10
+   File Content           :  alphanumeric characters
+   Delimiter Length       :  5
+   Delimiter Content      :  alphanumeric characters
+   Remove or Keep         :  Keep
+   Remove or Keep Length  :  5
+   Remove or Keep Content :  alphanumeric characters
+   Reverse Capitalization :  True
+
+
+Test Case 34 		(Key = 2.2.2.1.2.2.1.2.)
+   File Length            :  10
+   File Content           :  alphanumeric characters
+   Delimiter Length       :  5
+   Delimiter Content      :  alphanumeric characters
+   Remove or Keep         :  Keep
+   Remove or Keep Length  :  5
+   Remove or Keep Content :  alphanumeric characters
+   Reverse Capitalization :  False
+
+
+Test Case 35 		(Key = 2.2.2.2.1.2.1.1.)
+   File Length            :  10
+   File Content           :  alphanumeric characters
+   Delimiter Length       :  5
+   Delimiter Content      :  special characters
+   Remove or Keep         :  Remove
+   Remove or Keep Length  :  5
+   Remove or Keep Content :  alphanumeric characters
+   Reverse Capitalization :  True
+
+
+Test Case 36 		(Key = 2.2.2.2.1.2.1.2.)
+   File Length            :  10
+   File Content           :  alphanumeric characters
+   Delimiter Length       :  5
+   Delimiter Content      :  special characters
+   Remove or Keep         :  Remove
+   Remove or Keep Length  :  5
+   Remove or Keep Content :  alphanumeric characters
+   Reverse Capitalization :  False
+
+
+Test Case 37 		(Key = 2.2.2.2.2.2.1.1.)
+   File Length            :  10
+   File Content           :  alphanumeric characters
+   Delimiter Length       :  5
+   Delimiter Content      :  special characters
+   Remove or Keep         :  Keep
+   Remove or Keep Length  :  5
+   Remove or Keep Content :  alphanumeric characters
+   Reverse Capitalization :  True
+
+
+Test Case 38 		(Key = 2.2.2.2.2.2.1.2.)
+   File Length            :  10
+   File Content           :  alphanumeric characters
+   Delimiter Length       :  5
+   Delimiter Content      :  special characters
+   Remove or Keep         :  Keep
+   Remove or Keep Length  :  5
+   Remove or Keep Content :  alphanumeric characters
+   Reverse Capitalization :  False
+
+
+Test Case 39 		(Key = 2.2.2.3.1.2.1.1.)
+   File Length            :  10
+   File Content           :  alphanumeric characters
+   Delimiter Length       :  5
+   Delimiter Content      :  whitespace characters
+   Remove or Keep         :  Remove
+   Remove or Keep Length  :  5
+   Remove or Keep Content :  alphanumeric characters
+   Reverse Capitalization :  True
+
+
+Test Case 40 		(Key = 2.2.2.3.1.2.1.2.)
+   File Length            :  10
+   File Content           :  alphanumeric characters
+   Delimiter Length       :  5
+   Delimiter Content      :  whitespace characters
+   Remove or Keep         :  Remove
+   Remove or Keep Length  :  5
+   Remove or Keep Content :  alphanumeric characters
+   Reverse Capitalization :  False
+
+
+Test Case 41 		(Key = 2.2.2.3.2.2.1.1.)
+   File Length            :  10
+   File Content           :  alphanumeric characters
+   Delimiter Length       :  5
+   Delimiter Content      :  whitespace characters
+   Remove or Keep         :  Keep
+   Remove or Keep Length  :  5
+   Remove or Keep Content :  alphanumeric characters
+   Reverse Capitalization :  True
+
+
+Test Case 42 		(Key = 2.2.2.3.2.2.1.2.)
+   File Length            :  10
+   File Content           :  alphanumeric characters
+   Delimiter Length       :  5
+   Delimiter Content      :  whitespace characters
+   Remove or Keep         :  Keep
+   Remove or Keep Length  :  5
+   Remove or Keep Content :  alphanumeric characters
+   Reverse Capitalization :  False
+
+
+Test Case 43 		(Key = 3.1.1.0.1.2.1.1.)
+   File Length            :  100
+   File Content           :  all characters
+   Delimiter Length       :  0
+   Delimiter Content      :  <n/a>
+   Remove or Keep         :  Remove
+   Remove or Keep Length  :  5
+   Remove or Keep Content :  alphanumeric characters
+   Reverse Capitalization :  True
+
+
+Test Case 44 		(Key = 3.1.1.0.1.2.1.2.)
+   File Length            :  100
+   File Content           :  all characters
+   Delimiter Length       :  0
+   Delimiter Content      :  <n/a>
+   Remove or Keep         :  Remove
+   Remove or Keep Length  :  5
+   Remove or Keep Content :  alphanumeric characters
+   Reverse Capitalization :  False
+
+
+Test Case 45 		(Key = 3.1.1.0.2.2.1.1.)
+   File Length            :  100
+   File Content           :  all characters
+   Delimiter Length       :  0
+   Delimiter Content      :  <n/a>
+   Remove or Keep         :  Keep
+   Remove or Keep Length  :  5
+   Remove or Keep Content :  alphanumeric characters
+   Reverse Capitalization :  True
+
+
+Test Case 46 		(Key = 3.1.1.0.2.2.1.2.)
+   File Length            :  100
+   File Content           :  all characters
+   Delimiter Length       :  0
+   Delimiter Content      :  <n/a>
+   Remove or Keep         :  Keep
+   Remove or Keep Length  :  5
+   Remove or Keep Content :  alphanumeric characters
+   Reverse Capitalization :  False
+
+
+Test Case 47 		(Key = 3.1.2.1.1.2.1.1.)
+   File Length            :  100
+   File Content           :  all characters
+   Delimiter Length       :  5
+   Delimiter Content      :  alphanumeric characters
+   Remove or Keep         :  Remove
+   Remove or Keep Length  :  5
+   Remove or Keep Content :  alphanumeric characters
+   Reverse Capitalization :  True
+
+
+Test Case 48 		(Key = 3.1.2.1.1.2.1.2.)
+   File Length            :  100
+   File Content           :  all characters
+   Delimiter Length       :  5
+   Delimiter Content      :  alphanumeric characters
+   Remove or Keep         :  Remove
+   Remove or Keep Length  :  5
+   Remove or Keep Content :  alphanumeric characters
+   Reverse Capitalization :  False
+
+
+Test Case 49 		(Key = 3.1.2.1.2.2.1.1.)
+   File Length            :  100
+   File Content           :  all characters
+   Delimiter Length       :  5
+   Delimiter Content      :  alphanumeric characters
+   Remove or Keep         :  Keep
+   Remove or Keep Length  :  5
+   Remove or Keep Content :  alphanumeric characters
+   Reverse Capitalization :  True
+
+
+Test Case 50 		(Key = 3.1.2.1.2.2.1.2.)
+   File Length            :  100
+   File Content           :  all characters
+   Delimiter Length       :  5
+   Delimiter Content      :  alphanumeric characters
+   Remove or Keep         :  Keep
+   Remove or Keep Length  :  5
+   Remove or Keep Content :  alphanumeric characters
+   Reverse Capitalization :  False
+
+
+Test Case 51 		(Key = 3.1.2.2.1.2.1.1.)
+   File Length            :  100
+   File Content           :  all characters
+   Delimiter Length       :  5
+   Delimiter Content      :  special characters
+   Remove or Keep         :  Remove
+   Remove or Keep Length  :  5
+   Remove or Keep Content :  alphanumeric characters
+   Reverse Capitalization :  True
+
+
+Test Case 52 		(Key = 3.1.2.2.1.2.1.2.)
+   File Length            :  100
+   File Content           :  all characters
+   Delimiter Length       :  5
+   Delimiter Content      :  special characters
+   Remove or Keep         :  Remove
+   Remove or Keep Length  :  5
+   Remove or Keep Content :  alphanumeric characters
+   Reverse Capitalization :  False
+
+
+Test Case 53 		(Key = 3.1.2.2.2.2.1.1.)
+   File Length            :  100
+   File Content           :  all characters
+   Delimiter Length       :  5
+   Delimiter Content      :  special characters
+   Remove or Keep         :  Keep
+   Remove or Keep Length  :  5
+   Remove or Keep Content :  alphanumeric characters
+   Reverse Capitalization :  True
+
+
+Test Case 54 		(Key = 3.1.2.2.2.2.1.2.)
+   File Length            :  100
+   File Content           :  all characters
+   Delimiter Length       :  5
+   Delimiter Content      :  special characters
+   Remove or Keep         :  Keep
+   Remove or Keep Length  :  5
+   Remove or Keep Content :  alphanumeric characters
+   Reverse Capitalization :  False
+
+
+Test Case 55 		(Key = 3.1.2.3.1.2.1.1.)
+   File Length            :  100
+   File Content           :  all characters
+   Delimiter Length       :  5
+   Delimiter Content      :  whitespace characters
+   Remove or Keep         :  Remove
+   Remove or Keep Length  :  5
+   Remove or Keep Content :  alphanumeric characters
+   Reverse Capitalization :  True
+
+
+Test Case 56 		(Key = 3.1.2.3.1.2.1.2.)
+   File Length            :  100
+   File Content           :  all characters
+   Delimiter Length       :  5
+   Delimiter Content      :  whitespace characters
+   Remove or Keep         :  Remove
+   Remove or Keep Length  :  5
+   Remove or Keep Content :  alphanumeric characters
+   Reverse Capitalization :  False
+
+
+Test Case 57 		(Key = 3.1.2.3.2.2.1.1.)
+   File Length            :  100
+   File Content           :  all characters
+   Delimiter Length       :  5
+   Delimiter Content      :  whitespace characters
+   Remove or Keep         :  Keep
+   Remove or Keep Length  :  5
+   Remove or Keep Content :  alphanumeric characters
+   Reverse Capitalization :  True
+
+
+Test Case 58 		(Key = 3.1.2.3.2.2.1.2.)
+   File Length            :  100
+   File Content           :  all characters
+   Delimiter Length       :  5
+   Delimiter Content      :  whitespace characters
+   Remove or Keep         :  Keep
+   Remove or Keep Length  :  5
+   Remove or Keep Content :  alphanumeric characters
+   Reverse Capitalization :  False
+
+
+Test Case 59 		(Key = 3.2.1.0.1.2.1.1.)
+   File Length            :  100
+   File Content           :  alphanumeric characters
+   Delimiter Length       :  0
+   Delimiter Content      :  <n/a>
+   Remove or Keep         :  Remove
+   Remove or Keep Length  :  5
+   Remove or Keep Content :  alphanumeric characters
+   Reverse Capitalization :  True
+
+
+Test Case 60 		(Key = 3.2.1.0.1.2.1.2.)
+   File Length            :  100
+   File Content           :  alphanumeric characters
+   Delimiter Length       :  0
+   Delimiter Content      :  <n/a>
+   Remove or Keep         :  Remove
+   Remove or Keep Length  :  5
+   Remove or Keep Content :  alphanumeric characters
+   Reverse Capitalization :  False
+
+
+Test Case 61 		(Key = 3.2.1.0.2.2.1.1.)
+   File Length            :  100
+   File Content           :  alphanumeric characters
+   Delimiter Length       :  0
+   Delimiter Content      :  <n/a>
+   Remove or Keep         :  Keep
+   Remove or Keep Length  :  5
+   Remove or Keep Content :  alphanumeric characters
+   Reverse Capitalization :  True
+
+
+Test Case 62 		(Key = 3.2.1.0.2.2.1.2.)
+   File Length            :  100
+   File Content           :  alphanumeric characters
+   Delimiter Length       :  0
+   Delimiter Content      :  <n/a>
+   Remove or Keep         :  Keep
+   Remove or Keep Length  :  5
+   Remove or Keep Content :  alphanumeric characters
+   Reverse Capitalization :  False
+
+
+Test Case 63 		(Key = 3.2.2.1.1.2.1.1.)
+   File Length            :  100
+   File Content           :  alphanumeric characters
+   Delimiter Length       :  5
+   Delimiter Content      :  alphanumeric characters
+   Remove or Keep         :  Remove
+   Remove or Keep Length  :  5
+   Remove or Keep Content :  alphanumeric characters
+   Reverse Capitalization :  True
+
+
+Test Case 64 		(Key = 3.2.2.1.1.2.1.2.)
+   File Length            :  100
+   File Content           :  alphanumeric characters
+   Delimiter Length       :  5
+   Delimiter Content      :  alphanumeric characters
+   Remove or Keep         :  Remove
+   Remove or Keep Length  :  5
+   Remove or Keep Content :  alphanumeric characters
+   Reverse Capitalization :  False
+
+
+Test Case 65 		(Key = 3.2.2.1.2.2.1.1.)
+   File Length            :  100
+   File Content           :  alphanumeric characters
+   Delimiter Length       :  5
+   Delimiter Content      :  alphanumeric characters
+   Remove or Keep         :  Keep
+   Remove or Keep Length  :  5
+   Remove or Keep Content :  alphanumeric characters
+   Reverse Capitalization :  True
+
+
+Test Case 66 		(Key = 3.2.2.1.2.2.1.2.)
+   File Length            :  100
+   File Content           :  alphanumeric characters
+   Delimiter Length       :  5
+   Delimiter Content      :  alphanumeric characters
+   Remove or Keep         :  Keep
+   Remove or Keep Length  :  5
+   Remove or Keep Content :  alphanumeric characters
+   Reverse Capitalization :  False
+
+
+Test Case 67 		(Key = 3.2.2.2.1.2.1.1.)
+   File Length            :  100
+   File Content           :  alphanumeric characters
+   Delimiter Length       :  5
+   Delimiter Content      :  special characters
+   Remove or Keep         :  Remove
+   Remove or Keep Length  :  5
+   Remove or Keep Content :  alphanumeric characters
+   Reverse Capitalization :  True
+
+
+Test Case 68 		(Key = 3.2.2.2.1.2.1.2.)
+   File Length            :  100
+   File Content           :  alphanumeric characters
+   Delimiter Length       :  5
+   Delimiter Content      :  special characters
+   Remove or Keep         :  Remove
+   Remove or Keep Length  :  5
+   Remove or Keep Content :  alphanumeric characters
+   Reverse Capitalization :  False
+
+
+Test Case 69 		(Key = 3.2.2.2.2.2.1.1.)
+   File Length            :  100
+   File Content           :  alphanumeric characters
+   Delimiter Length       :  5
+   Delimiter Content      :  special characters
+   Remove or Keep         :  Keep
+   Remove or Keep Length  :  5
+   Remove or Keep Content :  alphanumeric characters
+   Reverse Capitalization :  True
+
+
+Test Case 70 		(Key = 3.2.2.2.2.2.1.2.)
+   File Length            :  100
+   File Content           :  alphanumeric characters
+   Delimiter Length       :  5
+   Delimiter Content      :  special characters
+   Remove or Keep         :  Keep
+   Remove or Keep Length  :  5
+   Remove or Keep Content :  alphanumeric characters
+   Reverse Capitalization :  False
+
+
+Test Case 71 		(Key = 3.2.2.3.1.2.1.1.)
+   File Length            :  100
+   File Content           :  alphanumeric characters
+   Delimiter Length       :  5
+   Delimiter Content      :  whitespace characters
+   Remove or Keep         :  Remove
+   Remove or Keep Length  :  5
+   Remove or Keep Content :  alphanumeric characters
+   Reverse Capitalization :  True
+
+
+Test Case 72 		(Key = 3.2.2.3.1.2.1.2.)
+   File Length            :  100
+   File Content           :  alphanumeric characters
+   Delimiter Length       :  5
+   Delimiter Content      :  whitespace characters
+   Remove or Keep         :  Remove
+   Remove or Keep Length  :  5
+   Remove or Keep Content :  alphanumeric characters
+   Reverse Capitalization :  False
+
+
+Test Case 73 		(Key = 3.2.2.3.2.2.1.1.)
+   File Length            :  100
+   File Content           :  alphanumeric characters
+   Delimiter Length       :  5
+   Delimiter Content      :  whitespace characters
+   Remove or Keep         :  Keep
+   Remove or Keep Length  :  5
+   Remove or Keep Content :  alphanumeric characters
+   Reverse Capitalization :  True
+
+
+Test Case 74 		(Key = 3.2.2.3.2.2.1.2.)
+   File Length            :  100
+   File Content           :  alphanumeric characters
+   Delimiter Length       :  5
+   Delimiter Content      :  whitespace characters
+   Remove or Keep         :  Keep
+   Remove or Keep Length  :  5
+   Remove or Keep Content :  alphanumeric characters
+   Reverse Capitalization :  False
+

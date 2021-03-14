@@ -1,0 +1,5 @@
+[flake8]
+# E501 - long ass lines
+# W292 - no newline at end of file
+# E221 - multipel spaces before operator
+ignore = E501, W292, E221

@@ -1,0 +1,40 @@
+{% extends 'baseedu.html' %}
+
+{% block content %}
+    {% load static %}
+    <!-- Container - Tutoring Session Waiting Room -->
+    <div id="sessionwaiting" class="container">
+
+        <!-- Login and Logo -->
+        <div class="row text-center">
+            <div class="col-xs-12">
+                {% if user.is_authenticated %}
+                <p><b><a href="/user/{{user.id}}">{{user.first_name}} {{user.last_name}} ({{user.username}})</a> | <a href="/logout/">Logout</a></b></p>
+                {% else %}
+                <p><b><a href="/login/">Login</a> | <a href="/signup/">Register</a></b></p>
+                {% endif %}
+                <h3><a href="/edu"><img src="{% static 'main/Edu.png'%}" class="img-responsive center-block"></a></h3>
+            </div>
+        </div>
+        <div class="row text-center">
+            <div class="col-xs-12">
+                <p class="bg-danger"><b>{{error_message}}</b></p>
+            </div>
+        </div>
+
+        <!-- Tutoring session matchmaker -->
+        <div class="row"><div class="col-xs-12 text-center"><h2>Tutoring Session Matchmaker</h2></div></div>
+        {% if form %}
+            <form action="/edu/sessionwaiting" method="post">
+                {% csrf_token %}
+                {% for field in form %}
+                    <div class="row">
+                        <div class="col-xs-6 text-right"><b>{{field.label_tag}}</b></b></div><div class="col-xs-6 text-left">{{field}}</div>
+                    </div>
+                {% endfor %}
+                <br>
+                <div class="row"><div class="col-xs-12 text-center"><input type="submit" value="Find Match" /></div></div>
+            </form>
+        {% endif %}
+    </div>
+{% endblock %}

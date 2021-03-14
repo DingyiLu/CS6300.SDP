@@ -1,0 +1,111 @@
+{% extends 'baseedu.html' %}
+
+{% block content %}
+    {% load static %}
+    <!-- Container - Course -->
+    <div id="student" class="container">
+
+        <!-- Login and Logo -->
+        <div class="row text-center">
+            <div class="col-xs-12">
+                {% if user.is_authenticated %}
+                <p><b><a href="/user/{{user.id}}">{{user.first_name}} {{user.last_name}} ({{user.username}})</a> | <a href="/logout/">Logout</a></b></p>
+                {% else %}
+                <p><b><a href="/login/">Login</a> | <a href="/signup/">Register</a></b></p>
+                {% endif %}
+                <h3><a href="/edu"><img src="{% static 'main/Edu.png'%}" class="img-responsive center-block"></a></h3>
+            </div>
+        </div>
+        <div class="row text-center">
+            <div class="col-xs-12">
+                <p class="bg-danger"><b>{{error_message}}</b></p>
+            </div>
+        </div>
+
+        <!-- Check for whether to present editing form -->
+        {% if student_id == "new" or editing == True %}
+            <!-- Only proceed if this is an admin or the student in question -->
+            {% if admin or is_this_student %}
+                <!-- Present the editing form -->
+                <div class="row text-center">
+                    <div class="col-xs-12">
+                        {% if student_id == "new" %}
+                        <h3>New Student Registration</h3>
+                        {% elif editing == True %}
+                        <h3>Edit Existing Student</h3>
+                        {% endif %}
+                        <br>
+                    </div>
+                </div>
+                <form action="/edu/student/{{student_id}}" method="post">
+                    {% csrf_token %}
+                    {% for field in form %}
+                        <div class="row">
+                            <div class="col-xs-6 text-right"><b>{{field.label_tag}}</b></b></div><div class="col-xs-6 text-left">{{field}}</div>
+                        </div>
+                    {% endfor %}
+                    <br>
+                    <div class="row"><div class="col-xs-12 text-center"><input type="submit" value="Save" /></div></div>
+                </form>
+            {% endif %}
+        {% else %}
+
+            <!-- Otherwise, display current information -->
+            <div class="row text-center">
+                <div class="col-xs-12">
+                    <a href="/edu/allstudents" style="color:black"><h3>School Students</h3></a>
+                    <h2>{{cur_student.first_name}} {{cur_student.last_name}}</h2>
+                </div>
+            </div>
+            <div class="row"><div class="col-xs-6 text-right"><b>Email:</b></div><div class="col-xs-6 text-left">{{cur_student.email}}</div></div>
+
+            <div class="row"><div class="col-xs-6 text-right"><b>Phone Number:</b></div><div class="col-xs-6 text-left">{{cur_student.phone_number}}</div></div>
+            <div class="row"><div class="col-xs-6 text-right"><b>Gender:</b></div><div class="col-xs-6 text-left">{{cur_student.gender}}</div></div>
+            <div class="row"><div class="col-xs-6 text-right"><b>Joined:</b></div><div class="col-xs-6 text-left">{{cur_student.date_joined}}</div></div>
+            <div class="row"><div class="col-xs-6 text-right"><b>Biography:</b></div><div class="col-xs-6 text-left">{% if cur_student.bio %}{{cur_student.bio}}{% endif %}</div></div>
+            <div class="row"><div class="col-xs-6 text-right"><b>Approved Tutoring Problems:</b></div><div class="col-xs-6 text-left">{{total_approved_problems}}</div></div>
+            <div class="row"><div class="col-xs-6 text-right"><b>Correct Tutoring Answers:</b></div><div class="col-xs-6 text-left">{{total_correct_answers}}</div></div>
+            <div class="row"><div class="col-xs-6 text-right"><b>Total Tutor Hours:</b></div><div class="col-xs-6 text-left">{{total_tutor_hours}}</div></div>
+            <div class="row"><div class="col-xs-6 text-right"><b>Total Tutee Hours:</b></div><div class="col-xs-6 text-left">{{total_tutee_hours}}</div></div>
+
+            <!--Only display an Edit button if this is an administrator -->
+            {% if admin or is_this_student %}
+                <div class="row"><div class="col-xs-6 text-right"><b>BC Address:</b></div><div class="col-xs-6 text-left">{{cur_student.bc_addr}}</div></div>
+                <br>
+                <form action="/edu/student/{{cur_student.id}}/edit">
+                    <div class="row"><div class="col-xs-12 text-center"><input type="submit" value="Edit Student"/></div></div>
+                </form>
+            {% endif %}
+
+            <!-- List out courses this student has attended -->
+            <br>
+            <div class="row"><div class="col-xs-12 text-center"><b>Courses Attended</b></div></div>
+            {% for course in courses_attended %}
+                <div class="row"><div class="col-xs-12 text-center"><a href="/edu/course/{{course.id}}">{{course.title}} ({{course.year}})</a></div></div>
+            {% endfor %}
+
+            <!-- List out badges earned -->
+            <br>
+            <div class="row"><div class="col-xs-12 text-center"><b>Badges Earned</b></div></div>
+            {% for badge in badges %}
+                <div class="row"><div class="col-xs-12 text-center"><a href="/edu/badge/{{badge.id}}">{{badge.title}} (By {{badge.teacher}})</a></div></div>
+            {% endfor %}
+
+            <!-- Teachers can award badges to students -->
+            {% if teacher %}
+                <br>
+                <form action="/edu/badge/create/{{teacher.id}}/{{cur_student.id}}">
+                    <div class="row"><div class="col-xs-12 text-center"><input type="submit" value="Award Badge"/></div></div>
+                </form>
+            {% endif %}
+
+            <!-- List out tutoring problems created -->
+            <br>
+            <div class="row"><div class="col-xs-12 text-center"><b>Approved Tutoring Problems Created</b></div></div>
+            {% for problem in tutor_problems %}
+                <div class="row"><div class="col-xs-12 text-center"><a href="/edu/problem/{{problem.id}}">Grade={{problem.grade}} ID={{problem.id}}</a></div></div>
+            {% endfor %}
+
+        {% endif %}
+    </div>
+{% endblock %}

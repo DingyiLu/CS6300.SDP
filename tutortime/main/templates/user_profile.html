@@ -1,0 +1,162 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% load static %}
+    <!-- Container - User Profile -->
+    <div id="login" class="container">
+        <div class="row text-center">
+            <div class="col-xs-12">
+                <h3><a href="/"><img src="{% static 'main/Innit.png'%}" class="img-responsive center-block"></a></h3>
+                <h3>{{current_user.first_name}} {{current_user.last_name}}</h3>
+            </div>
+        </div>
+        
+        <!-- If the user desired to edit their profile, then display the relevant forms -->
+        {% if command == "edit" %}
+            <div class="row">
+               <div class="col-xs-6 text-right"><b>Username:</b></div><div class="col-xs-6 text-left">{{ current_user.username }}</div>
+            </div>
+            <form action="/user/{{current_user.id}}" method="post" enctype="multipart/form-data">
+             {% csrf_token %}
+             {% for field in uform %}
+                 <div class="row text-center">
+                     <div class="col-xs-6 text-right"><b>{{ field.label_tag }}</b></div><div class="col-xs-6 text-left">{{ field }}</div>
+                 </div>
+                 <div class="col-xs-12">
+                     {% for error in field.errors %}
+                         <p style="color: red">{{ error }}</p>
+                     {% endfor %}
+                 </div>
+             {% endfor %}
+             {% for field in pform %}
+                 <div class="row text-center">
+                     <div class="col-xs-6 text-right"><b>{% if field.name == 'phone_number' %}Phone Number (Optional):{% else %}{{ field.label_tag }}{% endif %}</b></div><div class="col-xs-6 text-left">{{ field }}</div>
+                 </div>
+                 <div class="col-xs-12">
+                     {% for error in field.errors %}
+                         <p style="color: red">{{ error }}</p>
+                     {% endfor %}
+                 </div>
+             {% endfor %}
+             <div class="row text-center">
+                 <div class="col-xs-12">
+                     <br>
+                     <button type="submit">Save</button>
+                 </div>
+             </div>
+            </form>
+        {% else %}
+            <!-- Otherwise, display all of the normal info -->
+            <div class="row text-center"><div class="col-xs-12 text-center"><small><a href="/logout/">Logout</a></small></div></div>
+            {% if can_disconnect %}
+                <div class="row text-center"><div class="col-xs-12 text-center"><small><a href="/changepassword/">Change Password</a></small></div></div>
+            {% else %}
+                <div class="row text-center"><div class="col-xs-12 text-center"><small><a href="/setpassword">Set Password</a></small></div></div>
+            {% endif %}
+            <br>
+            {% if profile %}
+                {% if profile.profile_image %}
+                    <div class="row text-center"><div class="col-xs-12 text-center"><img src="{{profile.profile_image.url}}" class="img-thumbnail center-block"></div></div>
+                    <br>
+                {% endif %}
+            {% endif %}
+            <div class="row">
+               <div class="col-xs-6 text-right"><b>Username:</b></div><div class="col-xs-6 text-left">{{ current_user.username }}</div>
+            </div>
+            <div class="row">
+               <div class="col-xs-6 text-right"><b>Email Address:</b></div><div class="col-xs-6 text-left">{{ current_user.email }}</div>
+            </div>
+            {% if profile %}
+                {% if profile.phone_number %}
+                    <div class="row">
+                       <div class="col-xs-6 text-right"><b>Phone Number:</b></div><div class="col-xs-6 text-left">{{ profile.phone_number }}</div>
+                    </div>
+                {% endif %}
+            {% endif %}
+            
+            <!-- Display a button to edit this user -->
+            <div class="row text-center">
+                <div class="col-xs-12 text-center">
+                    <br>
+                    <form action="/user/{{current_user.id}}/edit">
+                        <input type="submit" value="Edit Info" />
+                    </form>
+                </div>
+            </div>
+
+            <!-- Facebook login and connection information -->
+            <br>
+            {% if facebook_login %}
+                <div class="row text-center"><div class="col-xs-12 text-center">
+                {% if can_disconnect %}
+                    <form method="post" action="{% url 'social:disconnect' 'facebook' %}">
+                        {% csrf_token %}
+                    <p></p><img src="{% static 'main/FacebookIcon.png'%}" class="img-responsive center-block"><button type="submit">Disconnect from Facebook</button></p>
+                    </form>
+                {% else %}
+                    <p><img src="{% static 'main/FacebookIcon.png'%}" class="img-responsive center-block"><button type="button" disabled>Disconnect from Facebook</button></p>
+                    <br>
+                    <p>You must <a href="/setpassword">set a password</a> for your account before disconnecting from Facebook.</p>
+                {% endif %}
+                </div></div>
+            {% else %}
+                <div class="row text-center"><div class="col-xs-12 text-center"><a href="{% url 'social:begin' 'facebook' %}"><img src="{% static 'main/FacebookConnect.png'%}" class="img-responsive center-block"></a></div></div>
+            {% endif %}
+            
+            <!-- Link to Fees and Payments -->
+            <br>
+            <div class="row text-center">
+                <div class="col-xs-12 text-center">
+                    <a href="/user_payments/{{current_user.id}}">View Fees and Payments</a>
+                </div>
+            </div>
+            
+            <!-- Current Volleyball Seasons, registered and unregistered -->
+            <div class="row text-center">
+                <div class="col-xs-12">
+                    <h2>Current Volleyball Seasons</h2>
+                    {% for player in current_vball_players %}
+                        <div class="col-xs-12 text-center"><a href="/volleyball/season/{{player.season.id}}">{{player.season.name}}</a> <font color="green"><b><i>*Registered*</i></b></font> <a href="/volleyball/season/{{player.season.id}}/player/{{player.id}}">View Player Profile</a></div>
+                    {% endfor %}
+                    {% for season in current_vball_unreg_seasons %}
+                        <div class="col-xs-12 text-center"><a href="/volleyball/season/{{season.id}}">{{season.name}}</a> <font color="red"><b><i>*Not Registered*</i></b></font> <a href="/volleyball/season/{{season.id}}/player/new">Register Now</a></div>
+                    {% endfor %}
+                </div>
+            </div>
+            <!-- Past Volleyball Seasons -->
+            <div class="row text-center">
+                <div class="col-xs-12">
+                    <br>
+                    <p><strong>Past Volleyball Seasons</strong></p>
+                    {% for season in past_vball_seasons %}
+                        <p><a href="/volleyball/season/{{season.id}}">{{season.name}}</a></p>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <!-- Current Pickleball Seasons, registered and unregistered -->
+            <div class="row text-center">
+                <div class="col-xs-12">
+                    <h2>Current Pickleball Seasons</h2>
+                    {% for player in current_pball_players %}
+                        <div class="col-xs-12 text-center"><a href="/pickleball/season/{{player.season.id}}">{{player.season.name}}</a> <font color="green"><b><i>*Registered*</i></b></font> <a href="/pickleball/season/{{player.season.id}}/player/{{player.id}}">View Player Profile</a></div>
+                    {% endfor %}
+                    {% for season in current_pball_unreg_seasons %}
+                        <div class="col-xs-12 text-center"><a href="/pickleball/season/{{season.id}}">{{season.name}}</a> <font color="red"><b><i>*Not Registered*</i></b></font> <a href="/pickleball/season/{{season.id}}/player/new">Register Now</a></div>
+                    {% endfor %}
+                </div>
+            </div>
+            <!-- Past Pickleball Seasons -->
+            <div class="row text-center">
+                <div class="col-xs-12">
+                    <br>
+                    <p><strong>Past Pickleball Seasons</strong></p>
+                    {% for season in past_pball_seasons %}
+                        <p><a href="/pickleball/season/{{season.id}}">{{season.name}}</a></p>
+                    {% endfor %}
+                </div>
+            </div>
+            
+        {% endif %}
+    </div>
+{% endblock %}

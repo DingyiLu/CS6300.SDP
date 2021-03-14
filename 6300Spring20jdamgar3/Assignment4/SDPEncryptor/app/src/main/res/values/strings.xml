@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">SDP Encryptor</string>
+    <string name="errormessage">Invalid Message</string>
+    <string name="errorshift">Invalid Shift Number</string>
+    <string name="missingmessage">Missing Message</string>
+
+    <string name="fieldID1">messageInput</string>
+    <string name="fieldID2">shiftNumber</string>
+    <string name="fieldID3">targetAlphabet</string>
+    <string name="fieldID4">cipherText</string>
+    <string name="buttonID">encryptButton</string>
+
+    <string-array name="alphabets">
+        <item>Normal</item>
+        <item>Reverse</item>
+        <item>QWERTY</item>
+    </string-array>
+
+
+</resources>

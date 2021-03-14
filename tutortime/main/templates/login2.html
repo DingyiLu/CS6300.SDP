@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% load static %}
+    <!-- Container - User login -->
+    <div id="login" class="container">
+        <div class="row text-center">
+            <div class="col-xs-12">
+                <h3><a href="/"><img src="{% static 'main/Innit.png'%}" class="img-responsive center-block"></a></h3>
+                <h2>Login</h2>
+            </div>
+        </div>
+        <div class="row text-center">
+            <div class="col-xs-12">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                <button type="submit">Login</button>
+                </form>
+            </div>
+        </div>
+        <br>
+        <p><strong>-- OR --</strong></p>
+        <div class="row text-center"><div class="col-xs-12 text-center"><a href="{% url 'social:begin' 'facebook' %}"><img src="{% static 'main/FacebookLogin.png'%}" class="img-responsive center-block"></a></div></div>
+        <br>
+        <div class="row text-center"><div class="col-xs-12 text-center"><small><a href="/password_reset/">Forgot Password</a></small></div></div>
+        <div class="row text-center"><div class="col-xs-12 text-center"><small><a href="/changepassword/">Change Password</a></small></div></div>
+        <br>
+        <div class="row text-center">
+            <div class="col-xs-12 text-center">
+                {% if request.GET.next %}
+                    <b>Don't have an INNIT account? <a href="/signup/?next={{request.GET.next}}">Sign up here!</a></b>
+                {% else %}
+                    <b>Don't have an INNIT account? <a href="/signup/">Sign up here!</a></b>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

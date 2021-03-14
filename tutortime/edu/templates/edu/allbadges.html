@@ -1,0 +1,60 @@
+{% extends 'baseedu.html' %}
+
+{% block content %}
+    {% load static %}
+    <!-- Container - All Badges -->
+    <div id="allbadges" class="container">
+
+        <!-- Login and Logo -->
+        <div class="row text-center">
+            <div class="col-xs-12">
+                {% if user.is_authenticated %}
+                <p><b><a href="/user/{{user.id}}">{{user.first_name}} {{user.last_name}} ({{user.username}})</a> | <a href="/logout/">Logout</a></b></p>
+                {% else %}
+                <p><b><a href="/login/">Login</a> | <a href="/signup/">Register</a></b></p>
+                {% endif %}
+                <h3><a href="/edu"><img src="{% static 'main/Edu.png'%}" class="img-responsive center-block"></a></h3>
+            </div>
+        </div>
+        <div class="row text-center">
+            <div class="col-xs-12">
+                <p class="bg-danger"><b>{{error_message}}</b></p>
+            </div>
+        </div>
+
+        <!--Only educators can create badges -->
+        {% if teacher %}
+            <br>
+            <form action="/edu/badge/create/{{teacher.id}}">
+                <div class="row"><div class="col-xs-12 text-center"><input type="submit" value="Award Digital Badge"/></div></div>
+            </form>
+        {% endif %}
+
+        <!-- All Badges -->
+        <div class="row text-center">
+            <div class="col-xs-12">
+               <h3>All Badges</h3>
+               <table class="table text-center">
+                <thead>
+                  <tr>
+                    <th>Title</th>
+                    <th>Awarded To</th>
+                    <th>Awarded On</th>
+                    <th>Awarded By</th>
+                  </tr>
+                </thead>
+                <tbody>
+                {% for badge in all_badges %}
+                  <tr>
+                    <td><a href="/edu/badge/{{badge.id}}" class="text-center" style="color:black"><b>{{badge.title}}</b></a></td>
+                    <td>{{badge.student.first_name}} {{badge.student.last_name}}</td>
+                    <td>{{badge.date_created}}</td>
+                    <td>{{badge.teacher.first_name}} {{badge.teacher.last_name}}</td>
+                  </tr>
+                {% endfor %}
+                </tbody>
+              </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

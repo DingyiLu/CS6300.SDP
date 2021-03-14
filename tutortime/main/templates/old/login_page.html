@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+{# Load the tag library #}
+{% load bootstrap3 %}
+
+{# Display django.contrib.messages as Bootstrap alerts #}
+{% bootstrap_messages %}
+{% load static %}
+<html lang="en">
+
+<head>
+    <title>InnitLife.com</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="{% static 'main.css' %}">
+    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet" type="text/css">
+    <link href="{% static 'main.css'%}" rel="stylesheet" type ="text/css" >
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+    
+</head>
+
+<body id="volleyball_main" data-spy="scroll" data-target=".navbar" data-offset="50">
+
+    <!-- Top bar navigation -->
+	{% include 'nav_bar.html' %}
+
+<div class="container">
+
+    <div id="login">
+        <table border="1">
+                <form name="login" method="post" action="auth/login/">
+                {{ forms.as_table }}{% csrf_token %}
+            <td><input  id='submit_button' type="submit" value="Login"></td>
+            </form>
+            <br>
+            <p><b>Don't have an INNIT account? <a href="/register/">Sign up here!</a></b></p>
+        </table>
+    </div>
+</div>
+    
+    
+    <!-- Container (Contact Section) -->
+    {% include 'contact.html' %}
+
+    <!-- Container (Footer Section) -->
+    {% include 'footer.html' %}
+
+</body>
+
+</html>
+

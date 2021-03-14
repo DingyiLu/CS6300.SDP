@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">WordFind6300</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_word_game">WordGameActivity</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="title_activity_statistics">StatisticsActivity</string>
+    <string name="title_activity_stats">StatsActivity</string>
+    <string name="tab_text_word_stats">Word Stats</string>
+    <string name="tab_text_game_stats">Game Stats</string>
+</resources>

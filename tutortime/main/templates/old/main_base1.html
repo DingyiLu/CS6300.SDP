@@ -1,0 +1,87 @@
+{# Load the tag library #}
+{% load bootstrap3 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+{# Display django.contrib.messages as Bootstrap alerts #}
+{% bootstrap_messages %}
+{% load static %}
+<html lang="en">
+<head>
+  <title>Initlife.com</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+</head>
+<body>
+<div class="container-fluid">
+
+  <div class="container" align="center">
+<div class="col-sm-12" style="background-color:white;"><img src="{% static 'logo_for_web.png' %}" class="img-responsive"></div>
+  </div>
+
+<div class="container-fluid" align="center">
+  <div class="jumbotron"  style="background-color:white;">
+      <h1>About INNIT</h1>
+      <p class="jumbotron" style="background-color:white;">
+          Life is about discovery and adventure. About good friends, camaraderie, and living in the now.
+          <br>
+          <br>
+          "Innit" is a lifestyle. For cyclists, engineers, athletes, artists, and wanderers the world around, who love to get out there and enjoy the ride.</p></div>
+    </div>
+
+    <div class="container"></div>
+  <br>
+        <!--
+<div id="myCarousel" class="carousel slide" data-ride="carousel">
+
+  <ol class="carousel-indicators">
+    <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+    <li data-target="#myCarousel" data-slide-to="1"></li>
+    <li data-target="#myCarousel" data-slide-to="2"></li>
+    <li data-target="#myCarousel" data-slide-to="3"></li>
+  </ol>
+
+
+  <div class="carousel-inner" role="listbox">
+    <div class="item active">
+        <img src="Test%20Images/Backround.png" alt="Chania">
+
+        <div  style="z-index:1;
+                    left:0px;
+                    top:-50px;
+                 position:relative;" align="center" ><font color="red">SODGSDGOSDGOJSDGSDOGHISDGOSDGHISDGSD text</font></div>
+
+    </div>
+
+
+
+      <div class="item">
+      <img src="Test%20Images/IMG_2507 (3).png" alt="Chania">
+    </div>
+
+    <div class="item">
+      <img src="Test%20Images/IMG_2898 (2).png" alt="Flower">
+    </div>
+
+    <div class="item">
+      <img src="Test%20Images/IMG_2900 (2).png" alt="Flower">
+    </div>
+  </div>
+
+  <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+    <span class="sr-only">Previous</span>
+  </a>
+  <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+    <span class="sr-only">Next</span>
+  </a>
+</div>
+
+whatever you want
+-->
+</body>
+</html>

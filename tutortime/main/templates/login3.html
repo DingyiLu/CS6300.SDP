@@ -1,0 +1,45 @@
+{% extends 'baseedu.html' %}
+
+{% block content %}
+    {% load static %}
+    <!-- Container - User login -->
+    <div id="login" class="container">
+
+        <!-- Login and Logo -->
+        <div class="row text-center">
+            <div class="col-xs-12">
+                {% if user.is_authenticated %}
+                <p><b><a href="/user/{{user.id}}">{{user.first_name}} {{user.last_name}} ({{user.username}})</a> | <a href="/logout/">Logout</a></b></p>
+                {% else %}
+                <p><b><a href="/login/">Login</a> | <a href="/signup/">Register</a></b></p>
+                {% endif %}
+                <h3><a href="/edu"><img src="{% static 'main/Edu.png'%}" class="img-responsive center-block"></a></h3>
+            </div>
+        </div>
+        <div class="row text-center">
+            <div class="col-xs-12">
+                <p class="bg-danger"><b>{{error_message}}</b></p>
+            </div>
+        </div>
+
+        <div class="row text-center">
+            <div class="col-xs-12">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                <button type="submit">Login</button>
+                </form>
+            </div>
+        </div>
+        <br>
+        <div class="row text-center">
+            <div class="col-xs-12 text-center">
+                {% if request.GET.next %}
+                    <b>Don't have an account? <a href="/signup/?next={{request.GET.next}}">Sign up here!</a></b>
+                {% else %}
+                    <b>Don't have an account? <a href="/signup/">Sign up here!</a></b>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

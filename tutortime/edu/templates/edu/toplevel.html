@@ -1,0 +1,50 @@
+{% extends 'baseedu.html' %}
+
+{% block content %}
+    {% load static %}
+    <!-- Container - Top level -->
+    <div id="toplevel" class="container">
+
+        <!-- Login and Logo -->
+        <div class="row text-center">
+            <div class="col-xs-12">
+                {% if user.is_authenticated %}
+                <p><b><a href="/user/{{user.id}}">{{user.first_name}} {{user.last_name}} ({{user.username}})</a> | <a href="/logout/">Logout</a></b></p>
+                {% else %}
+                <p><b><a href="/login/">Login</a> | <a href="/signup/">Register</a></b></p>
+                {% endif %}
+                <h3><a href="/edu"><img src="{% static 'main/Edu.png'%}" class="img-responsive center-block"></a></h3>
+            </div>
+        </div>
+        <div class="row text-center">
+            <div class="col-xs-12">
+                <p class="bg-danger"><b>{{error_message}}</b></p>
+            </div>
+        </div>
+
+        <!-- Current Courses
+        <div class="row text-center">
+            <div class="col-xs-12">
+                <h2>Current Courses</h2>
+                {% for course in current_courses %}
+                    <h3><a href="/edu/course/{{course.id}}">{{course.name}}</a></h3>
+                {% endfor %}
+            </div>
+        </div> -->
+        
+        <!-- Links to other pages -->
+        <div class="row text-center">
+            <div class="col-xs-12">
+                <p><a href="/edu/allcourses">View All Courses</a></p>
+                <p><a href="/edu/alladmins">View All Administrators</a></p>
+                <p><a href="/edu/allteachers">View All Teachers</a></p>
+                <p><a href="/edu/allstudents">View All Students</a></p>
+                <p><a href="/edu/allproblems">View All Tutor Problems</a></p>
+                <p><a href="/edu/allanswers">View All Tutee Answers</a></p>
+                <p><a href="/edu/allsessions">View All Tutoring Sessions</a></p>
+                <p><a href="/edu/allbadges">View All Student Badges</a></p>
+                <p><a href="/edu/leaders/all">View Student Leaderboard</a></p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

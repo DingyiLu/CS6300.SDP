@@ -1,0 +1,20 @@
+*.class
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+/6300Spring20Team92.iml
+
+# Ignore project-specific build and IDE items
+GroupProject/WordFind6300/local.properties
+GroupProject/WordFind6300/app/app.iml
+GroupProject/WordFind6300/.gradle
+GroupProject/WordFind6300/.idea
+GroupProject/WordFind6300/app/build
